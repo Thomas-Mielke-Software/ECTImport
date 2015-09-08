@@ -1,6 +1,4 @@
-========================================================================
-    ACTIVEX CONTROL DLL : ECTImport Project Overview
-========================================================================
+# ACTIVEX CONTROL DLL : ECTImport Project Overview
 
 ### Compiling ECTImport Plugin ###
 
