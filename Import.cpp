@@ -464,15 +464,16 @@ BOOL CImport::Execute(CByteArray *pSelectionArray) {
     // close file
     File.Close();
   }
-  catch ( CFileException E )
+  catch ( CFileException *e )
   {
       LPTSTR MsgBuf = NULL;
-      if ( FormatMessage ( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, E.m_lOsError, 0, (LPTSTR) &MsgBuf, 0, NULL) )
+      if ( FormatMessage ( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, e->m_lOsError, 0, (LPTSTR) &MsgBuf, 0, NULL) )
       {
         m_Errors.Add ( 0, MsgBuf );
         LocalFree ( MsgBuf );
       }
 	  if ( DlgProgress ) delete DlgProgress;
+	  delete e;
       return FALSE;
   }
   catch ( ... )

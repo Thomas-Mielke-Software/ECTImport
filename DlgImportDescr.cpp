@@ -819,8 +819,9 @@ BOOL CDlgImportDescr::UpdateFileContent ()
       if ( !File.ReadString ( Line ) )
         break;
     }
-    catch ( CFileException E )
+    catch ( CFileException *e )
     {
+	  delete e;
       break;
     }
 
@@ -1100,8 +1101,9 @@ BOOL CDlgImportDescr::GetColumnTitles ( CCSVFile *File )
       if ( !File->ReadString ( Line ) )
         break;
     }
-    catch ( CFileException E )
+    catch ( CFileException *e )
     {
+	  delete e;
       break;
     }
 
