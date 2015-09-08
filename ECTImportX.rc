@@ -1,0 +1,493 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// German (Germany) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "1 TYPELIB ""ECTImportX.tlb""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 5,0,0,1
+ PRODUCTVERSION 5,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "Rüdiger Herrmann und Thomas Mielke"
+            VALUE "FileDescription", "CSV-Import-Plugin für EasyCash&Tax"
+            VALUE "FileVersion", "5.0.0.1"
+            VALUE "InternalName", "ECTImportX.ocx"
+            VALUE "LegalCopyright", "Copyright (C) 2001, 2004 Rüdiger Herrmann; (C) 2008-2015 Modifikationen durch Thomas Mielke; LGPL 2.1"
+            VALUE "OriginalFilename", "ECTImportX.ocx"
+            VALUE "ProductName", "CSV-Import-Plugin für EasyCash&Tax"
+            VALUE "ProductVersion", "5.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ABOUTDLL            ICON                    "ECTImportX.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_ECTIMPORTX          BITMAP                  "ECTImportXCtrl.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX_ECTIMPORTX DIALOGEX 0, 0, 292, 125
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About ECTImportX Control"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDOK,194,100,50,14
+    LTEXT           "CSV-Import Plugin für EasyCash&Tax",IDC_STATIC,41,7,215,8,SS_NOPREFIX
+    LTEXT           "Copyright © Rüdiger Herrmann 2001, 2004",IDC_STATIC,41,37,234,8
+    LTEXT           "Version 1.0.0.1",IDC_VERSION,41,19,116,8,SS_NOPREFIX
+    LTEXT           "Kontakt",IDC_STATIC,41,92,26,8,SS_NOPREFIX
+    ICON            "",IDC_ABOUTICON,7,6,21,20
+    EDITTEXT        IDC_EMAIL,75,92,100,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_TRANSPARENT
+    LTEXT           "Adaptiert auf das neue Plugin-Interface durch Thomas Mielke in 2008, verschiedene neue Features eingebaut in 2009",IDC_STATIC,42,51,243,23
+    LTEXT           "Diese Software unterliegt einer GNU Open Source Lizenz: LGPL 2.1",IDC_STATIC,41,75,244,8
+END
+
+IDD_IMPORTFORM DIALOGEX 0, 0, 316, 185
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,205,164,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,259,164,50,14
+END
+
+CG_IDD_PROGRESS DIALOGEX 0, 0, 184, 66
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "",CG_IDC_PROGDLG_STATUS,5,5,172,8,SS_NOPREFIX
+    CONTROL         "",CG_IDC_PROGDLG_PROGRESS,"msctls_progress32",0x0,5,25,172,13
+    DEFPUSHBUTTON   "Abbre&chen",IDCANCEL,127,45,50,14
+END
+
+IDD_IMPORTDESCR DIALOGEX 0, 0, 367, 427
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "&Importbeschreibung",IDC_STATIC,7,9,63,8
+    COMBOBOX        IDC_IMPORTDESCR,75,8,174,82,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "&Neu",IDC_NEWIMPORTDESCR,255,7,50,14
+    PUSHBUTTON      "&Löschen",IDC_DELIMPORTDESCR,309,7,50,14
+    GROUPBOX        "Importdatei",IDC_GROUPBOX1,7,25,352,131
+    CONTROL         "&Dateiname",IDC_STATIC1,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,11,37,35,10
+    EDITTEXT        IDC_FILENAME,56,35,233,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Durch&suchen...",IDC_SELFILENAME,295,35,60,14
+    LTEXT           "&Trennzeichen",IDC_STATIC2,11,54,44,8
+    EDITTEXT        IDC_SEPARATORCHAR,56,52,45,12,ES_AUTOHSCROLL
+    LTEXT           "Anzahl Ko&pfzeilen",IDC_STATIC3,149,54,57,8
+    EDITTEXT        IDC_NUMHEADERLINES,211,52,27,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_NUMHEADERLINES_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,239,52,10,14
+    PUSHBUTTON      "An&zeigen",IDC_VIEWFILECONTENT,295,52,60,14
+    LTEXT           "D&ateiinhalt",IDC_STATIC4,7,84,34,8
+    CONTROL         "",IDC_FILECONTENT,"SysListView32",LVS_REPORT | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,11,95,342,40,WS_EX_CLIENTEDGE
+    LTEXT           "&Ein/Aus",IDC_STATIC5,13,173,26,8
+    COMBOBOX        IDC_FIELD_EA,63,169,106,111,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Einnahme",IDC_STATIC11,175,171,32,8
+    EDITTEXT        IDC_FIELD_EA_FORMAT_E,209,169,30,14,ES_AUTOHSCROLL
+    LTEXT           "Ausgabe",IDC_STATIC12,249,171,29,8
+    EDITTEXT        IDC_FIELD_EA_FORMAT_A,285,169,30,14,ES_AUTOHSCROLL
+    LTEXT           "Datu&m",IDC_STATIC6,13,188,22,8
+    COMBOBOX        IDC_FIELD_DATUM,63,184,106,119,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Format",IDC_STATIC13,175,186,22,8
+    COMBOBOX        IDC_FIELD_DATUM_FORMAT,209,184,59,78,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Trennzeichen",IDC_STATIC14,285,186,44,8
+    EDITTEXT        IDC_FIELD_DATUM_DELIMITER,338,184,16,14,ES_AUTOHSCROLL
+    LTEXT           "&Betrag",IDC_STATIC7,13,203,22,8
+    COMBOBOX        IDC_FIELD_BETRAG,63,199,106,117,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Format",IDC_STATIC15,175,201,22,8
+    COMBOBOX        IDC_FIELD_BETRAG_FORMAT,209,199,145,78,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "B&rutto/Netto",IDC_STATIC19,13,218,40,8
+    COMBOBOX        IDC_FIELD_BRUTTONETTO,63,214,106,117,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Brutto",IDC_STATIC20,175,217,20,8
+    EDITTEXT        IDC_FIELD_BN_FORMAT_BRUTTO,209,214,30,14,ES_AUTOHSCROLL
+    LTEXT           "Netto",IDC_STATIC21,249,217,18,8
+    EDITTEXT        IDC_FIELD_BN_FORMAT_NETTO,285,214,30,14,ES_AUTOHSCROLL
+    LTEXT           "Besc&hreibung",IDC_STATIC8,13,233,44,8
+    COMBOBOX        IDC_FIELD_BESCHREIBUNG,63,229,106,109,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Belegnummer",IDC_STATIC22,13,249,44,8
+    COMBOBOX        IDC_FIELD_BELEGNUMMER,63,245,106,109,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "&Konto",IDC_STATIC9,13,264,43,8
+    COMBOBOX        IDC_FIELD_KONTO,63,260,106,105,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Ste&uersatz",IDC_STATIC10,13,279,39,8
+    COMBOBOX        IDC_FIELD_STEUERSATZ,63,275,106,102,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Format",IDC_STATIC16,175,277,22,8
+    COMBOBOX        IDC_FIELD_STEUERSATZ_FORMAT,209,275,145,78,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "AfA akt. Jahr",IDC_STATIC17,13,293,45,8
+    COMBOBOX        IDC_FIELD_AFAAKTJAHR,63,290,106,102,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "AfA Dauer",IDC_STATIC18,13,308,39,8
+    COMBOBOX        IDC_FIELD_AFADAUER,63,305,106,102,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "AfA Restwert",IDC_STATIC24,13,322,47,8
+    COMBOBOX        IDC_FIELD_AFARESTWERT,63,320,106,102,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Format",IDC_STATIC25,175,322,22,8
+    COMBOBOX        IDC_FIELD_AFARESTWERT_FORMAT,209,320,145,78,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "AfA deg. Satz",IDC_STATIC23,13,337,47,8
+    COMBOBOX        IDC_FIELD_AFADEGSATZ,63,335,106,102,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Format",IDC_STATIC26,175,337,22,8
+    COMBOBOX        IDC_FIELD_AFADEGSATZ_FORMAT,209,335,145,78,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "Alle importieren",IDOK,225,406,80,14
+    PUSHBUTTON      "Z&urück",IDCANCEL,309,406,50,14
+    CONTROL         "",IDC_DOKUMENTCTRL1,
+                    "{ED09076F-B744-47A1-8D60-F9EF093F19F0}",WS_TABSTOP,40,399,26,21
+    CONTROL         "",IDC_BUCHUNGCTRL1,
+                    "{3BC20630-93BA-47B2-82D1-820C7F1986A1}",WS_TABSTOP,69,399,24,21
+    LTEXT           "Zum Auswählen mehrerer Einträge die Maustaste zusammen mit STRG oder Shift klicken.",IDC_STATIC30,39,142,289,8
+    DEFPUSHBUTTON   "Selektierte importieren",IDOK2,141,406,80,14,WS_DISABLED
+    CONTROL         "",IDC_EINSTELLUNGCTRL1,
+                    "{DFA091A6-D040-444F-800A-656BEA3361C3}",WS_TABSTOP,95,399,26,21
+    PUSHBUTTON      "Info",IDC_INFO,7,406,30,14
+    GROUPBOX        "Zuordnung der Buchungsfelder zu Dateifeldern",IDC_GROUPBOX2,7,157,352,242
+    LTEXT           "AfA Genau.",IDC_STATIC27,13,353,39,8
+    COMBOBOX        IDC_FIELD_AFAGENAUIGKEIT,63,350,106,102,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Betrieb",IDC_STATIC28,13,366,47,8
+    COMBOBOX        IDC_FIELD_BETRIEB,63,365,106,102,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Bestandskonto",IDC_STATIC29,13,383,47,8
+    COMBOBOX        IDC_FIELD_BESTANDSKONTO,63,380,106,102,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "&GAWK Skript",IDC_STATIC31,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,11,71,41,10
+    EDITTEXT        IDC_GAWKSCRIPT,56,69,45,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Durchs&uchen...",IDC_SELGAWKSCRIPT,167,69,60,14
+    PUSHBUTTON      "Aus&führen...",IDC_EXEGAWKSCRIPT,295,69,60,14
+    PUSHBUTTON      "Bea&rbeiten...",IDC_EDITGAWKSCRIPT,231,69,60,14
+    LTEXT           "Für Hilfe eines der Steuerelemente des\r\nPlugins anklicken und F1 drücken!",IDC_STATIC35,41,404,127,16
+    CONTROL         "(zur Vorverarbeitung von CSVs, Benutzung ist optional)",IDC_STATIC32,
+                    "Static",SS_LEFTNOWORDWRAP | WS_GROUP,105,71,59,10
+END
+
+IDD_IMPORTSTATUS DIALOGEX 0, 0, 276, 202
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Protokoll"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "&Fehlermeldungen",IDC_STATIC,7,32,55,8
+    DEFPUSHBUTTON   "&OK",IDOK,219,181,50,14
+    CONTROL         "",IDC_MESSAGES,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,7,42,262,134,WS_EX_CLIENTEDGE
+    LTEXT           "Während dem Import sind Fehler aufgetreten. Die unten aufgeführten Zeilen wurden nicht importiert.",IDC_STATIC,38,7,231,21,SS_NOPREFIX
+    ICON            "",IDC_ERRORICON,7,7,21,20
+END
+
+IDD_NEWIMPORTDESCR DIALOGEX 0, 0, 214, 54
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Neue Importbeschreibung"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "&Name",IDC_STATIC,7,7,20,8
+    EDITTEXT        IDC_NAME,7,19,142,14,ES_AUTOHSCROLL
+    CONTROL         "&Vorhandene Eigenschaften übernehmen",IDC_COPYEXISTING,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,36,143,10
+    DEFPUSHBUTTON   "&OK",IDOK,157,7,50,14
+    PUSHBUTTON      "Abbre&chen",IDCANCEL,157,24,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX_ECTIMPORTX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 285
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 118
+    END
+
+    IDD_IMPORTFORM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 178
+    END
+
+    CG_IDD_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 177
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 59
+    END
+
+    IDD_IMPORTDESCR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 360
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 420
+    END
+
+    IDD_IMPORTSTATUS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 269
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 195
+    END
+
+    IDD_NEWIMPORTDESCR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 207
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 47
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_IMPORTDESCR DLGINIT
+BEGIN
+    IDC_FIELD_DATUM_FORMAT, 0x403, 9, 0
+0x5454, 0x4d20, 0x204d, 0x4a4a, "\000" 
+    IDC_FIELD_DATUM_FORMAT, 0x403, 9, 0
+0x4d4d, 0x5420, 0x2054, 0x4a4a, "\000" 
+    IDC_FIELD_DATUM_FORMAT, 0x403, 9, 0
+0x4a4a, 0x4d20, 0x204d, 0x5454, "\000" 
+    IDC_FIELD_DATUM_FORMAT, 0x403, 11, 0
+0x5454, 0x4d20, 0x204d, 0x4a4a, 0x4a4a, "\000" 
+    IDC_FIELD_DATUM_FORMAT, 0x403, 11, 0
+0x4d4d, 0x5420, 0x2054, 0x4a4a, 0x4a4a, "\000" 
+    IDC_FIELD_DATUM_FORMAT, 0x403, 11, 0
+0x4a4a, 0x4a4a, 0x4d20, 0x204d, 0x5454, "\000" 
+    IDC_FIELD_BETRAG_FORMAT, 0x403, 27, 0
+0x6544, 0x697a, 0x616d, 0x6b6c, 0x6d6f, 0x616d, 0x2820, 0x2e7a, 0x2e42, 
+0x3120, 0x3332, 0x342c, 0x2935, "\000" 
+    IDC_FIELD_BETRAG_FORMAT, 0x403, 27, 0
+0x6544, 0x697a, 0x616d, 0x706c, 0x6e75, 0x746b, 0x2820, 0x2e7a, 0x2e42, 
+0x3120, 0x3332, 0x342e, 0x2935, "\000" 
+    IDC_FIELD_BETRAG_FORMAT, 0x403, 35, 0
+0xe457, 0x7268, 0x6e75, 0x7367, 0x6965, 0x686e, 0x6965, 0x2074, 0x202f, 
+0x3031, 0x2030, 0x2820, 0x2e7a, 0x2e42, 0x4320, 0x6e65, 0x2974, "\000" 
+    IDC_FIELD_STEUERSATZ_FORMAT, 0x403, 27, 0
+0x6544, 0x697a, 0x616d, 0x6b6c, 0x6d6f, 0x616d, 0x2820, 0x2e7a, 0x2e42, 
+0x3120, 0x3332, 0x342c, 0x2935, "\000" 
+    IDC_FIELD_STEUERSATZ_FORMAT, 0x403, 27, 0
+0x6544, 0x697a, 0x616d, 0x706c, 0x6e75, 0x746b, 0x2820, 0x2e7a, 0x2e42, 
+0x3120, 0x3332, 0x342e, 0x2935, "\000" 
+    IDC_FIELD_STEUERSATZ_FORMAT, 0x403, 35, 0
+0xe457, 0x7268, 0x6e75, 0x7367, 0x6965, 0x686e, 0x6965, 0x2074, 0x202f, 
+0x3031, 0x2030, 0x2820, 0x2e7a, 0x2e42, 0x4320, 0x6e65, 0x2974, "\000" 
+    IDC_FIELD_AFARESTWERT_FORMAT, 0x403, 27, 0
+0x6544, 0x697a, 0x616d, 0x6b6c, 0x6d6f, 0x616d, 0x2820, 0x2e7a, 0x2e42, 
+0x3120, 0x3332, 0x342c, 0x2935, "\000" 
+    IDC_FIELD_AFARESTWERT_FORMAT, 0x403, 27, 0
+0x6544, 0x697a, 0x616d, 0x706c, 0x6e75, 0x746b, 0x2820, 0x2e7a, 0x2e42, 
+0x3120, 0x3332, 0x342e, 0x2935, "\000" 
+    IDC_FIELD_AFARESTWERT_FORMAT, 0x403, 35, 0
+0xe457, 0x7268, 0x6e75, 0x7367, 0x6965, 0x686e, 0x6965, 0x2074, 0x202f, 
+0x3031, 0x2030, 0x2820, 0x2e7a, 0x2e42, 0x4320, 0x6e65, 0x2974, "\000" 
+    IDC_FIELD_AFADEGSATZ_FORMAT, 0x403, 27, 0
+0x6544, 0x697a, 0x616d, 0x6b6c, 0x6d6f, 0x616d, 0x2820, 0x2e7a, 0x2e42, 
+0x3120, 0x3332, 0x342c, 0x2935, "\000" 
+    IDC_FIELD_AFADEGSATZ_FORMAT, 0x403, 27, 0
+0x6544, 0x697a, 0x616d, 0x706c, 0x6e75, 0x746b, 0x2820, 0x2e7a, 0x2e42, 
+0x3120, 0x3332, 0x342e, 0x2935, "\000" 
+    IDC_FIELD_AFADEGSATZ_FORMAT, 0x403, 35, 0
+0xe457, 0x7268, 0x6e75, 0x7367, 0x6965, 0x686e, 0x6965, 0x2074, 0x202f, 
+0x3031, 0x2030, 0x2820, 0x2e7a, 0x2e42, 0x4320, 0x6e65, 0x2974, "\000" 
+    IDC_DOKUMENTCTRL1, 0x376, 20, 0
+0x0000, 0x0000, 0x0000, 0x0001, 0x0408, 0x0000, 0x0384, 0x0000, 0x0000, 
+0x0000, 
+    IDC_BUCHUNGCTRL1, 0x376, 20, 0
+0x0000, 0x0000, 0x0000, 0x0001, 0x03b9, 0x0000, 0x0384, 0x0000, 0x0000, 
+0x0000, 
+    IDC_EINSTELLUNGCTRL1, 0x376, 20, 0
+0x0000, 0x0000, 0x0000, 0x0001, 0x0408, 0x0000, 0x0384, 0x0000, 0x0000, 
+0x0000, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_ECTIMPORTX          "ECTImportX Control"
+    IDS_ECTIMPORTX_PPG      "ECTImportX Property Page"
+    IDS_OPENFILEFILTER      "CSV-Dateien (*.csv)|*.csv|Textdateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*||"
+    IDS_OPENFILEDEFEXT      "csv"
+    IDS_CONFIRMDELIMPORTDESCR 
+                            "Soll die Importbeschreibung '%s' wirklich gelöscht werden?"
+    IDS_NAMEISEMPTY         "Der Name darf nicht leer sein."
+    IDS_NAMEALREADYEXISTS   "Unter diesem Namen ist bereits eine Importbeschreibung vorhanden."
+    IDS_IMPERR_INVALIDPARAMS "Interner Fehler: Ungültige(r) Parameter."
+    IDS_IMPERR_EOFINHEADER  "%d|Das Dateiende wurde erreicht, ohne daß die Kopfzeilen vollständig überlesen werden konnten."
+    IDS_IMPERR_UNKNOWN      "Unbekannter Fehler."
+    IDS_STANDARD            "(Standard)"
+    IDS_FIELDX              "Feld %d"
+    IDS_DATATYPE_UNKNOWN    "Unbekannt"
+    IDS_DATATYPE_DATE       "Datum"
+    IDS_DATATYPE_TEXT       "Text"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ECTIMPORTX_PPG_CAPTION "General"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_DATATYPE_CURRENCY   "Betrag"
+    IDS_DATATYPE_EA         "Einnahme/Ausgabe"
+    IDS_DATATYPE_INT        "Ganzzahl"
+    IDS_VERSION             "Version %d.%d.%d.%d"
+    IDS_APP_ABOUT           "&Info..."
+    IDS_PLUGIN_MENUENTRY    "&Import"
+    IDS_PLUGIN_VERSIONERROR "Das Import-Modul setzt EasyCash&Tax ab der Version 1.19 voraus."
+    IDS_IMPORTSUCCESFUL     "Der Import wurde erfolgreicht durchgeführt. Es wurden %d Buchungen importiert."
+    IDS_PARAMERR_NOFILENAME "Geben Sie bitte einen Dateinamen an."
+    IDS_PARAMERR_NOFSEPARATORCHAR "Geben Sie bitte das Trennzeichen ein."
+    IDS_PARAMERR_NOFIELDEA  "Geben Sie bitte an, wie das Feld ""Einnahme/Ausgabe"" zugeordnet wird."
+    IDS_PARAMERR_NOFIELDBETRAG 
+                            "Geben Sie bitte an, wie das Feld ""Betrag"" zugeordnet wird."
+    IDS_PARAMETER_SEPARATORCHAR_TO_LONG 
+                            "Das Trennzeichen darf nicht länger als ein Zeichen sein."
+    IDS_NO_IMPORTDESCR_SELECTED 
+                            "Wählen Sie bitte eine Import-Beschreibung aus."
+    IDS_IMPERR_INVALID_FIELD_INDEX 
+                            "Der Feldindex %d liegt außerhalb des gültigen Bereiches (%d - %d)."
+    IDS_IMPERR_CONVERSION_FALIED 
+                            "Fehler bei der Konvertierung des Feldes %d: ""%s"" kann nicht in den Datentyp %s konvertiert werden."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_IMPERR_FILE_EMPTY   "Die Datei ist leer."
+    IDS_IMPERR_LINE_EMPTY   "Die Zeile enthält keine Daten."
+    IDS_IMPORTSTATUS_ERRORLIST_COL1 "Zeile"
+    IDS_IMPORTSTATUS_ERRORLIST_COL2 "Meldung"
+    IDS_DEFAULTNAME         "Unbenannt %d"
+    IDS_ERROR_SAVETOINIFILE "Fehler beim Speichern der Einstellungen."
+    IDS_ERROR_LOADFROMINIFILE 
+                            "Die gespeicherten Einstellungen konnten nicht geladen werden. Es werden die Standardeinstellungen verwendet."
+    IDS_CONVERSIONRULE_INCOME_ONLY "(Nur Einnahmen)"
+    IDS_CONVERSIONRULE_EXPENSE_ONLY "(Nur Ausgaben)"
+    IDS_CONVERSIONRULE_USE_SIGN "(Entsprechend Vorzeichen)"
+    IDS_IMPERR_INVALID_PARAMETERS "Interner Fehler: Ungülige Parameter."
+    IDS_OPENGAWKFILTER      "GAWK-Skripte (*.awk)|*.awk|Alle Dateien (*.*)|*.*||"
+    IDS_OPENGAWKDEFEXT      "awk"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PROGRESS_CAPTION    "Import"
+    IDS_PROGRESS_STATUS_IMPORTING "Die Daten werden importiert..."
+    IDS_CONFIRM_USERINTERRUPT_MESSAGE 
+                            "Soll der Vorgang wirklich abgebrochen werden?"
+    IDS_CONFIRM_USERINTERRUPT_CAPTION "Import"
+    IDS_DATATYPE_BRUTTONETTO "Brutto/Netto"
+    IDS_EMAIL               "ruediger.herrmann@gmx.de"
+    IDS_CONVERSIONRULE_BRUTTO_ONLY "(Nur Bruttobeträge)"
+    IDS_CONVERSIONRULE_NETTO_ONLY "(Nur Nettobeträge)"
+    IDS_PROGRESS_STATUS_SORTING "Die Buchungen werden sortiert..."
+END
+
+#endif    // German (Germany) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "ECTImportX.tlb"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

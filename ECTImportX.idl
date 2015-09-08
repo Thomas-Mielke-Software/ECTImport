@@ -1,0 +1,53 @@
+// ECTImportX.idl : type library source for ActiveX Control project.
+
+// This file will be processed by the MIDL compiler tool to
+// produce the type library (ECTImportX.tlb) that will become a resource in
+// ECTImportX.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(3BB16BA6-DAC5-40ED-B3B9-8A2F3644E326), version(1.0),
+  helpfile("ECTImportX.hlp"),
+  helpstring("ECTImportX ActiveX Control module"),
+  control ]
+library ECTImportXLib
+{
+	importlib(STDOLE_TLB);
+
+	//  Primary dispatch interface for CECTImportXCtrl
+
+	[ uuid(C0940CD6-FE5D-4F94-A8D9-8BC0B30198BC),
+	  helpstring("Dispatch interface for ECTImportX Control")]
+	dispinterface _DECTImportX
+	{
+		properties:
+		methods:
+
+			[id(DISPID_ABOUTBOX)] void AboutBox();
+			[id(1), helpstring("method Init")] void Init(LONG dokID);
+	};
+
+	//  Event dispatch interface for CECTImportXCtrl
+
+	[ uuid(1380B78A-5545-4E30-8955-A7FD6057AB4B),
+	  helpstring("Event interface for ECTImportX Control") ]
+	dispinterface _DECTImportXEvents
+	{
+		properties:
+			//  Event interface has no properties
+
+		methods:
+	};
+
+	//  Class information for CECTImportXCtrl
+
+	[ uuid(163097F8-09D6-4437-B1DC-16DCAB67BC4D),
+	  helpstring("ECTImportX Control"), control ]
+	coclass ECTImportX
+	{
+		[default] dispinterface _DECTImportX;
+		[default, source] dispinterface _DECTImportXEvents;
+	};
+
+};
