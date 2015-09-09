@@ -1,4 +1,4 @@
-# ACTIVEX CONTROL DLL : ECTImport Project Overview
+# ECTImport Project Overview
 
 ### Compiling ECTImport Plugin ###
 
@@ -21,31 +21,42 @@ Platzhalter für Zeitangaben im Dateinamen einführen.
 
 ### Changelog ###
 
-v5.0: auf Visual Studio 2013 umgestellt -- umgeht hoffentlich das 'P'-Problem; Umzug auf GitHub 
-v4.3:
+####v5.0: auf Visual Studio 2013 umgestellt -- umgeht hoffentlich das 'P'-Problem; Umzug auf GitHub 
+
+####v4.3:
  - GAWK Static 'optional' hinzugefügt
  - kleine Änderungen zum Debuggen des seltsamen P-Problems (Bugtracker #0000989 )
-v4.2: 
+ 
+####v4.2: 
  - Es gab bei der Berechnung des Brutto-Betrags aus importierten Netto-Beträgen > 11302,54€ einen 32-bit-Überlauf, 
    der dazu führte, dass ein zu niedriger Betrag importiert wurde. Die Berechnung ist jetzt auf 64 bit umgestellt. 
  - Destroy und delete getrennt
  - Skript-Funktion für den Installer programmiert, der prüft, ob der Task noch läuft und ggf. um Beendigung bittet.
-v4.1: GAWK geupdatet, Nachkommaanteil beim Import von MWSt-Sätzen wird jetzt nicht mehr abgehackt; gawk 4.0.0 hinzugefügt
-v4.0: GAWK-Skripting Unterstützung und F1-Hilfe auf HTML umgestellt
-v3.9: Bugfix, beim Restwert wurde nur der Nachkommaanteil importiert.
-v3.8:
+ 
+####v4.1: GAWK geupdatet, Nachkommaanteil beim Import von MWSt-Sätzen wird jetzt nicht mehr abgehackt; gawk 4.0.0 hinzugefügt
+
+####v4.0: GAWK-Skripting Unterstützung und F1-Hilfe auf HTML umgestellt
+
+####v3.9: Bugfix, beim Restwert wurde nur der Nachkommaanteil importiert.
+
+####v3.8:
  - Als Release funktioniert das geupdatete Import-Plugin. Aber erst nach einem IS-Setup Lauf.
  - Ausgaben-Konten werden jetzt als Festwert aufgelistet bei 'gem.Vorzeichen'.
  - AbschreibungGenauigkeit, Betrieb und Bestandskonto berücksichtigt. Gibt heap corruption.
  - Die Felder machen ein Problem mit dem EC&T-ActiveX-IDs. Muss ich eine neue Version des Controls bauen?
-v3.6: 
+ 
+####v3.6: 
  - Toleranterer Code zum Parsen des Datums (evtl. angehängte Uhrzeit wird jetzt ignoriert)
  - Bugfix: Datum wurde manchmal auf einen Tag früher gesetzt beim Importieren.
  - ToDo aktualisiert: "Leerzeilen in den Combo-Boxen, wo eine nicht-Eingabe sinnvoll ist, ist eine gute Idee!"
-v3.5: Bug beseitigt, der dazu führte, dass die Spaltengrößen nicht gespeichert wurden.
-v3.4: Bug beseitigt, der dazu führte, dass die Festwerte nicht übernommen wurden.
-v3.3: Bug beseitigt, der dazu führte, dass die Festwerte bei Konto und Steuersatz nicht mehr übernommen wurden.
-v3.2: 
+ 
+####v3.5: Bug beseitigt, der dazu führte, dass die Spaltengrößen nicht gespeichert wurden.
+
+####v3.4: Bug beseitigt, der dazu führte, dass die Festwerte nicht übernommen wurden.
+
+####v3.3: Bug beseitigt, der dazu führte, dass die Festwerte bei Konto und Steuersatz nicht mehr übernommen wurden.
+
+####v3.2: 
 - Liste wird bei Änderung der Fenstergröße jetzt nicht mehr komplett neu aufgebaut (was zu einem erheblich schnelleren Bildaufbau führt)
 - Spaltenbreiten werden jetzt in der Importbeschreibung gespeichert
 - Fehlermeldung 'Invalid Parameter' unterdrückt
