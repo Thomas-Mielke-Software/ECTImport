@@ -61,8 +61,8 @@ Platzhalter für Zeitangaben im Dateinamen einführen.
 - Spaltenbreiten werden jetzt in der Importbeschreibung gespeichert
 - Fehlermeldung 'Invalid Parameter' unterdrückt
 
-Version 1.2.0.3 - 28.03.2004
-----------------------------
+####v1.2.0.3 - 28.03.2004
+
 Erweiterungen:
 - Import von Dateien deren Felder durch Tabs getrennt sind ist jetzt möglich.
 
@@ -73,28 +73,23 @@ Fehler behoben:
   Einnahme zu Buche schlagen.
   Fehler korrigert,
 
+####v1.2.0.2 - 26.03.2004
 
-Version 1.2.0.2 - 26.03.2004
-----------------------------
 Fehler behoben:
 - Allg. Schutzverletzung beim Öffnen des Import-Dialoges korrigiert.
 
+####v1.2.0.2 - 26.03.2004
 
-Version 1.2.0.2 - 26.03.2004
-----------------------------
 Fehler behoben:
 - Allg. Schutzverletzung beim Öffnen des Import-Dialoges korrigiert.
 
+####v1.2.0.1 - 04.03.2004
 
-Version 1.2.0.1 - 04.03.2004
-----------------------------
 Fehler behoben:
 - AfA Restwert kann nun importiert werden. Wenn nicht angegeben wird
   er berechnet.
 
-
-Version 1.2.0.0 - 24.02.2004
-----------------------------
+####v1.2.0.0 - 24.02.2004
 
 Erweiterungen:
 - Die zuletzt verwendete (in ComboBox Importbeschreibung ausgewählte) 
@@ -106,36 +101,28 @@ Erweiterungen:
 Fehler behoben:
 - Speicherleck gestopft
 
-
-Version 1.0.2.0 - 23.05.2001
-----------------------------
+####v1.0.2.0 - 23.05.2001
 
 Erweiterungen:
 
 - Abschreibung (Dauer und akt. Jahr) können nun importiert werden.
 - Kontext-Hilfe vervollständigt.
 
-
-Version 1.0.3.0 - 30.05.2001
-----------------------------
+####v1.0.3.0 - 30.05.2001
 
 Erweiterungen:
 - Fortschritt-Anzeige bei längeren Import-Vorgängen (geschätzte 
   Zeit > 4 Sekunden). Wird in eigenem Fenster Angezeigt, Möglichkeit
   zum Abbruch der Aktion.
   
-
-Version 1.0.3.0 - 13.06.2001
-----------------------------
+####v1.0.3.0 - 13.06.2001
 
 Fehler behoben:
 - Bei der Konvertierung von Währungsbeträgen bestand ein Fehler:
   so wurde z. B. aus "122,4" 12,2.
   Fehler behoben.
 
-
-Version 1.0.3.0 - 14.06.2001
-----------------------------
+####v1.0.3.0 - 14.06.2001
 
 Fehler behoben:
 - Fehler bei der Konvertierung von Datumsangaben. Dati mit 
