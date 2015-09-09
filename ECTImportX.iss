@@ -12,15 +12,13 @@ AppUpdatesURL=http://www.easyct.de
 DefaultDirName={pf}\EasyCash&Tax\Plugins\CSV-Import
 DefaultGroupName=EasyCash
 OutputBaseFilename=ECTImportXSetup
-OutputDir=D:\Work\ECTImportX\Setup
+OutputDir=.\Setup
 MinVersion=5.0
 ; MFC9 greift auf GetFileSizeEx zu, das Win 98 nicht in der kernel.dll hat.
 Compression=bzip   
 SignTool=vs6
 
 [Files]
-Source: .\vcredist_x86.exe; DestDir: {tmp}; Flags: dontcopy; 
-; bitte eine aktuelle Visual C++ 2013 Runtime von der Microsoft-Website herunterladen!
 Source: .\Release\ECTImportX.ocx; DestDir: {app}; Flags: regserver ignoreversion
 Source: .\ECTIFace.dll; DestDir: {app}; Flags: ignoreversion
 ; ECTIFace nur noch benötigt für GetIniFileName
@@ -42,9 +40,19 @@ Root: HKLM; Subkey: Software\Tools\EasyCash\Plugins\CSV-Import; ValueType: strin
 Root: HKLM; Subkey: Software\Tools\EasyCash\Plugins\CSV-Import; ValueType: string; ValueName: Typ; ValueData: noscroll
 
 [Languages]
-Name: default; MessagesFile: compiler:Languages\German.isl
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"
 
 [Code]
+// shared code for installing the products
+#include "scripts\products.iss"
+// helper functions
+#include "scripts\products\stringversion.iss"
+#include "scripts\products\winversion.iss"
+#include "scripts\products\fileversion.iss"
+// actual products       
+#include "scripts\products\msiproduct.iss"
+#include "scripts\products\vcredist2013.iss"
+
 function CheckProcessRunning( aProcName,
                               aProcDesc: string ): boolean;
 var
@@ -91,40 +99,15 @@ function InitializeSetup: Boolean;
 begin
   // Do not use any user defined vars in here such as {app}
   Result := not ( CheckProcessRunning( 'EasyCT.exe',      'EasyCash&Tax' ));
+
+	initwinversion();
+  SetForceX86(true); // force 32-bit install of next products
+	vcredist2013();
+	SetForceX86(false); // disable forced 32-bit install again
 end;
 
 
 function InitializeUninstall: Boolean;
 begin
   Result := not ( CheckProcessRunning( 'EasyCT.exe',      'EasyCash&Tax' ));
-end;     
-
-// Installation der VC Laufzeitumgebung
-
-function IsRuntimeInstalled: Boolean;
-begin
-  Result := False;
-  // TODO: here will be a statement that will check whether the runtime is installed
-  // and return True if so; see e.g. http://stackoverflow.com/q/11137424/960757
-end;
- 
-function PrepareToInstall(var NeedsRestart: Boolean): string;
-var
-  ExitCode: Integer;
-begin
-  // if the runtime is not already installed
-  if not IsRuntimeInstalled then
-  begin
-    // extract the redist to the temporary folder
-    ExtractTemporaryFile('vcredist_x86.exe');
-    // run the redist from the temp folder; if that fails, return from this handler the error text
-    if not Exec(ExpandConstant('{tmp}\vcredist_x86.exe'), '/q:a /c:"VCREDI~3.EXE /q:a /c:""msiexec /i vcredist.msi /qn"" "', '', SW_SHOW, ewWaitUntilTerminated, ExitCode) then
-    begin
-      // return the error text
-      Result := 'Setup failed to install VC++ runtime. Exit code: ' + IntToStr(ExitCode);
-      // exit this function; this makes sense only if there are further prerequisites to install; in this
-      // particular example it does nothing because the function exits anyway, so it is pointless here
-      Exit;
-    end;
-  end;
-end;
+end;   
