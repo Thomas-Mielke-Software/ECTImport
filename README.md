@@ -2,7 +2,7 @@
 
 ### Compiling ECTImport Plugin ###
 
-Der Code compiliert momentan unter Visual Studion 2013 -- benutze einfach die freie Community Edition
+Der Code compiliert momentan unter Visual Studio 2013 -- benutze einfach die freie Community Edition
 
 Zum Debuggen ist es empfohlen eine Version von EC&T auﬂerhalb von "C:\Programme (x86)" 
 zu installieren und den Linker-Output-Pfad entsprechend zu setzen. 
