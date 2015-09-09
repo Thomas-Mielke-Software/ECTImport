@@ -21,7 +21,8 @@ Platzhalter für Zeitangaben im Dateinamen einführen.
 
 ### Changelog ###
 
-####v5.0: auf Visual Studio 2013 umgestellt -- umgeht hoffentlich das 'P'-Problem; Umzug auf GitHub 
+####v5.0: 
+ - auf Visual Studio 2013 umgestellt -- umgeht hoffentlich das 'P'-Problem; Umzug auf GitHub 
 
 ####v4.3:
  - GAWK Static 'optional' hinzugefügt
@@ -33,11 +34,15 @@ Platzhalter für Zeitangaben im Dateinamen einführen.
  - Destroy und delete getrennt
  - Skript-Funktion für den Installer programmiert, der prüft, ob der Task noch läuft und ggf. um Beendigung bittet.
  
-####v4.1: GAWK geupdatet, Nachkommaanteil beim Import von MWSt-Sätzen wird jetzt nicht mehr abgehackt; gawk 4.0.0 hinzugefügt
+####v4.1:
+ - GAWK geupdatet, Nachkommaanteil beim Import von MWSt-Sätzen wird jetzt nicht mehr abgehackt
+ - gawk 4.0.0 hinzugefügt
 
-####v4.0: GAWK-Skripting Unterstützung und F1-Hilfe auf HTML umgestellt
+####v4.0: 
+ - GAWK-Skripting Unterstützung und F1-Hilfe auf HTML umgestellt
 
-####v3.9: Bugfix, beim Restwert wurde nur der Nachkommaanteil importiert.
+####v3.9: 
+ - Bugfix, beim Restwert wurde nur der Nachkommaanteil importiert.
 
 ####v3.8:
  - Als Release funktioniert das geupdatete Import-Plugin. Aber erst nach einem IS-Setup Lauf.
@@ -50,11 +55,14 @@ Platzhalter für Zeitangaben im Dateinamen einführen.
  - Bugfix: Datum wurde manchmal auf einen Tag früher gesetzt beim Importieren.
  - ToDo aktualisiert: "Leerzeilen in den Combo-Boxen, wo eine nicht-Eingabe sinnvoll ist, ist eine gute Idee!"
  
-####v3.5: Bug beseitigt, der dazu führte, dass die Spaltengrößen nicht gespeichert wurden.
+####v3.5: 
+ - Bug beseitigt, der dazu führte, dass die Spaltengrößen nicht gespeichert wurden.
 
-####v3.4: Bug beseitigt, der dazu führte, dass die Festwerte nicht übernommen wurden.
+####v3.4: 
+ - Bug beseitigt, der dazu führte, dass die Festwerte nicht übernommen wurden.
 
-####v3.3: Bug beseitigt, der dazu führte, dass die Festwerte bei Konto und Steuersatz nicht mehr übernommen wurden.
+####v3.3: 
+ - Bug beseitigt, der dazu führte, dass die Festwerte bei Konto und Steuersatz nicht mehr übernommen wurden.
 
 ####v3.2: 
 - Liste wird bei Änderung der Fenstergröße jetzt nicht mehr komplett neu aufgebaut (was zu einem erheblich schnelleren Bildaufbau führt)
