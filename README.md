@@ -21,6 +21,10 @@ Platzhalter für Zeitangaben im Dateinamen einführen.
 
 ### Changelog ###
 
+####v5.2: 
+- XP-Kompatibilität wiederhergestellt
+- gawk.exe Aufruf erfolgt nun explizit im DOS 8.3 Dateinamensformat, um Leerzeichen nich escapen zu müssen
+
 ####v5.0: 
  - auf Visual Studio 2013 umgestellt -- umgeht hoffentlich das 'P'-Problem; Umzug auf GitHub 
 
