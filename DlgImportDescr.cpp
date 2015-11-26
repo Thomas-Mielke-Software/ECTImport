@@ -1379,8 +1379,9 @@ void CDlgImportDescr::OnBnClickedExegawkscript()
 {
 	extern CECTImportXApp theApp;
 	char exefilename[MAX_PATH];
+	char exefilenameescaped[MAX_PATH];
 	char commandline[MAX_PATH+1000];
-	char *cp;
+	char *cp, *cp2;
 	if (::GetModuleFileName(theApp.m_hInstance, exefilename, MAX_PATH) && (cp = strrchr(exefilename, '\\')))
 	{
 		// hole Werte aus edit controls
@@ -1395,7 +1396,20 @@ void CDlgImportDescr::OnBnClickedExegawkscript()
 
 		// Kommandozeile zusammensetzen und ausführen
 		strcpy(cp, "\\gawk.exe");
-		sprintf(commandline, "/C %s -F \"%s\" -f \"%s\" \"%s\" > \"%s.awked\" & pause", exefilename, SeparatorChar.GetBuffer(0), GawkScript.GetBuffer(0), Filename, Filename);
+		/* cp = exefilename;
+		cp2 = exefilenameescaped;
+		while (*cp2 = *cp) // blödes cmd.exe escaping...
+		{
+			if (*cp == ' ' || *cp == '&' || *cp == '<' || *cp == '>' || *cp == '(' || *cp == ')' || *cp == '@' || *cp == '^' || *cp == '|')
+			{
+				*cp2++ = '^';
+				*cp2 = *cp;
+			}
+			cp2++;
+			cp++;
+		} ich gebs auf! GetShortPathName() stattdessen */ 
+		GetShortPathName(exefilename, exefilenameescaped, sizeof(exefilenameescaped));
+		sprintf(commandline, "/C %s -F \"%s\" -f \"%s\" \"%s\" > \"%s.awked\" & pause", exefilenameescaped, SeparatorChar.GetBuffer(0), (LPCTSTR)GawkScript, (LPCTSTR)Filename, (LPCTSTR)Filename);
 		::ShellExecute(NULL, "open", "cmd.exe", commandline, NULL, SW_SHOWNORMAL);
 		Filename += ".awked";
 

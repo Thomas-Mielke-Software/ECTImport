@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 8.00.0603 */
-/* at Wed Sep 09 00:46:05 2015
+ /* File created by MIDL compiler version 7.00.0555 */
+/* at Thu Nov 26 15:49:16 2015
  */
 /* Compiler settings for ECTImportX.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
+    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -44,14 +44,12 @@
 #ifndef ___DECTImportX_FWD_DEFINED__
 #define ___DECTImportX_FWD_DEFINED__
 typedef interface _DECTImportX _DECTImportX;
-
 #endif 	/* ___DECTImportX_FWD_DEFINED__ */
 
 
 #ifndef ___DECTImportXEvents_FWD_DEFINED__
 #define ___DECTImportXEvents_FWD_DEFINED__
 typedef interface _DECTImportXEvents _DECTImportXEvents;
-
 #endif 	/* ___DECTImportXEvents_FWD_DEFINED__ */
 
 
@@ -71,17 +69,6 @@ typedef struct ECTImportX ECTImportX;
 extern "C"{
 #endif 
 
-
-/* interface __MIDL_itf_ECTImportX_0000_0000 */
-/* [local] */ 
-
-#pragma once
-#pragma region Desktop Family
-#pragma endregion
-
-
-extern RPC_IF_HANDLE __MIDL_itf_ECTImportX_0000_0000_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_ECTImportX_0000_0000_v0_0_s_ifspec;
 
 
 #ifndef __ECTImportXLib_LIBRARY_DEFINED__
@@ -119,7 +106,7 @@ EXTERN_C const IID DIID__DECTImportX;
             _DECTImportX * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _DECTImportX * This);
@@ -147,22 +134,14 @@ EXTERN_C const IID DIID__DECTImportX;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _DECTImportX * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } _DECTImportXVtbl;
@@ -234,7 +213,7 @@ EXTERN_C const IID DIID__DECTImportXEvents;
             _DECTImportXEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _DECTImportXEvents * This);
@@ -262,22 +241,14 @@ EXTERN_C const IID DIID__DECTImportXEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _DECTImportXEvents * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } _DECTImportXEventsVtbl;

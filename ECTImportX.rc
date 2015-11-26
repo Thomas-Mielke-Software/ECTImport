@@ -57,8 +57,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 5,0,0,1
- PRODUCTVERSION 5,0,0,1
+ FILEVERSION 5,2,0,1
+ PRODUCTVERSION 5,2,0,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -75,12 +75,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Rüdiger Herrmann und Thomas Mielke"
             VALUE "FileDescription", "CSV-Import-Plugin für EasyCash&Tax"
-            VALUE "FileVersion", "5.0.0.1"
+            VALUE "FileVersion", "5.2.0.1"
             VALUE "InternalName", "ECTImportX.ocx"
             VALUE "LegalCopyright", "Copyright (C) 2001, 2004 Rüdiger Herrmann; (C) 2008-2015 Modifikationen durch Thomas Mielke; LGPL 2.1"
             VALUE "OriginalFilename", "ECTImportX.ocx"
             VALUE "ProductName", "CSV-Import-Plugin für EasyCash&Tax"
-            VALUE "ProductVersion", "5.0.0.1"
+            VALUE "ProductVersion", "5.2.0.1"
         END
     END
     BLOCK "VarFileInfo"
