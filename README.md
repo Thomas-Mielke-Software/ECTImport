@@ -4,9 +4,9 @@
 
 Der Code compiliert momentan unter Visual Studio 2013 -- benutze einfach die freie Community Edition
 
-Zum Debuggen ist es empfohlen eine Version von EC&T außerhalb von "C:\Programme (x86)" 
+Zum Debuggen ist es empfohlen eine Version von EC&T auÃŸerhalb von "C:\Programme (x86)" 
 zu installieren und den Linker-Output-Pfad entsprechend zu setzen. 
-Das erspart das ständige Kopieren ins Plugin-Verzeichnis mit Administratorrechten.
+Das erspart das stÃ¤ndige Kopieren ins Plugin-Verzeichnis mit Administratorrechten.
 
 "Error MSB8011: Failed to register output. Please try enabling Per-user Redirection or register 
 the component from a command prompt with elevated permissions." ist eine normale Ausgabe.
@@ -14,36 +14,39 @@ Ggf. mit RegSrv32 und Admin-Privilegien manuell im CSV-Import-Plugin registriere
 
 ### ToDo ###
 
-Benötigt ECTIFace im Plugin-Verzeichnis, damit das Registrieren funktioniert.
-Das könnte mal geändert werden.
+BenÃ¶tigt ECTIFace im Plugin-Verzeichnis, damit das Registrieren funktioniert.
+Das kÃ¶nnte mal geÃ¤ndert werden.
 
-Platzhalter für Zeitangaben im Dateinamen einführen.
+Platzhalter fÃ¼r Zeitangaben im Dateinamen einfÃ¼hren.
 
 ### Changelog ###
 
+####v5.3 und v5.4: 
+- versucht, das Problem abgeschnittener Anfangsbuchstaben bei Beschreibungstexten oder Kontennamen zu lÃ¶sen
+
 ####v5.2: 
-- XP-Kompatibilität wiederhergestellt
-- gawk.exe Aufruf erfolgt nun explizit im DOS 8.3 Dateinamensformat, um Leerzeichen nich escapen zu müssen
+- XP-KompatibilitÃ¤t wiederhergestellt
+- gawk.exe Aufruf erfolgt nun explizit im DOS 8.3 Dateinamensformat, um Leerzeichen nich escapen zu mÃ¼ssen
 
 ####v5.0: 
  - auf Visual Studio 2013 umgestellt -- umgeht hoffentlich das 'P'-Problem; Umzug auf GitHub 
 
 ####v4.3:
- - GAWK Static 'optional' hinzugefügt
- - kleine Änderungen zum Debuggen des seltsamen P-Problems (Bugtracker #0000989 )
+ - GAWK Static 'optional' hinzugefÃ¼gt
+ - kleine Ã„nderungen zum Debuggen des seltsamen P-Problems (Bugtracker #0000989 )
  
 ####v4.2: 
- - Es gab bei der Berechnung des Brutto-Betrags aus importierten Netto-Beträgen > 11302,54€ einen 32-bit-Überlauf, 
-   der dazu führte, dass ein zu niedriger Betrag importiert wurde. Die Berechnung ist jetzt auf 64 bit umgestellt. 
+ - Es gab bei der Berechnung des Brutto-Betrags aus importierten Netto-BetrÃ¤gen > 11302,54â‚¬ einen 32-bit-Ãœberlauf, 
+   der dazu fÃ¼hrte, dass ein zu niedriger Betrag importiert wurde. Die Berechnung ist jetzt auf 64 bit umgestellt. 
  - Destroy und delete getrennt
- - Skript-Funktion für den Installer programmiert, der prüft, ob der Task noch läuft und ggf. um Beendigung bittet.
+ - Skript-Funktion fÃ¼r den Installer programmiert, der prÃ¼ft, ob der Task noch lÃ¤uft und ggf. um Beendigung bittet.
  
 ####v4.1:
- - GAWK geupdatet, Nachkommaanteil beim Import von MWSt-Sätzen wird jetzt nicht mehr abgehackt
- - gawk 4.0.0 hinzugefügt
+ - GAWK geupdatet, Nachkommaanteil beim Import von MWSt-SÃ¤tzen wird jetzt nicht mehr abgehackt
+ - gawk 4.0.0 hinzugefÃ¼gt
 
 ####v4.0: 
- - GAWK-Skripting Unterstützung und F1-Hilfe auf HTML umgestellt
+ - GAWK-Skripting UnterstÃ¼tzung und F1-Hilfe auf HTML umgestellt
 
 ####v3.9: 
  - Bugfix, beim Restwert wurde nur der Nachkommaanteil importiert.
@@ -51,49 +54,49 @@ Platzhalter für Zeitangaben im Dateinamen einführen.
 ####v3.8:
  - Als Release funktioniert das geupdatete Import-Plugin. Aber erst nach einem IS-Setup Lauf.
  - Ausgaben-Konten werden jetzt als Festwert aufgelistet bei 'gem.Vorzeichen'.
- - AbschreibungGenauigkeit, Betrieb und Bestandskonto berücksichtigt. Gibt heap corruption.
+ - AbschreibungGenauigkeit, Betrieb und Bestandskonto berÃ¼cksichtigt. Gibt heap corruption.
  - Die Felder machen ein Problem mit dem EC&T-ActiveX-IDs. Muss ich eine neue Version des Controls bauen?
  
 ####v3.6: 
- - Toleranterer Code zum Parsen des Datums (evtl. angehängte Uhrzeit wird jetzt ignoriert)
- - Bugfix: Datum wurde manchmal auf einen Tag früher gesetzt beim Importieren.
+ - Toleranterer Code zum Parsen des Datums (evtl. angehÃ¤ngte Uhrzeit wird jetzt ignoriert)
+ - Bugfix: Datum wurde manchmal auf einen Tag frÃ¼her gesetzt beim Importieren.
  - ToDo aktualisiert: "Leerzeilen in den Combo-Boxen, wo eine nicht-Eingabe sinnvoll ist, ist eine gute Idee!"
  
 ####v3.5: 
- - Bug beseitigt, der dazu führte, dass die Spaltengrößen nicht gespeichert wurden.
+ - Bug beseitigt, der dazu fÃ¼hrte, dass die SpaltengrÃ¶ÃŸen nicht gespeichert wurden.
 
 ####v3.4: 
- - Bug beseitigt, der dazu führte, dass die Festwerte nicht übernommen wurden.
+ - Bug beseitigt, der dazu fÃ¼hrte, dass die Festwerte nicht Ã¼bernommen wurden.
 
 ####v3.3: 
- - Bug beseitigt, der dazu führte, dass die Festwerte bei Konto und Steuersatz nicht mehr übernommen wurden.
+ - Bug beseitigt, der dazu fÃ¼hrte, dass die Festwerte bei Konto und Steuersatz nicht mehr Ã¼bernommen wurden.
 
 ####v3.2: 
-- Liste wird bei Änderung der Fenstergröße jetzt nicht mehr komplett neu aufgebaut (was zu einem erheblich schnelleren Bildaufbau führt)
+- Liste wird bei Ã„nderung der FenstergrÃ¶ÃŸe jetzt nicht mehr komplett neu aufgebaut (was zu einem erheblich schnelleren Bildaufbau fÃ¼hrt)
 - Spaltenbreiten werden jetzt in der Importbeschreibung gespeichert
-- Fehlermeldung 'Invalid Parameter' unterdrückt
+- Fehlermeldung 'Invalid Parameter' unterdrÃ¼ckt
 
 ####v1.2.0.3 - 28.03.2004
 
 Erweiterungen:
-- Import von Dateien deren Felder durch Tabs getrennt sind ist jetzt möglich.
+- Import von Dateien deren Felder durch Tabs getrennt sind ist jetzt mÃ¶glich.
 
 Fehler behoben:
 - Bei der Unterscheidung von Einnahmen und Ausgaben "Entsprechend Vorzeichen"
   wird bei Ausgaben das Vorzeichen beibehalten wenn die Buchung erstellt wird.
-  Das führt - logischerweise - zu "negativen" Ausgaben die wiederum wie eine
+  Das fÃ¼hrt - logischerweise - zu "negativen" Ausgaben die wiederum wie eine
   Einnahme zu Buche schlagen.
   Fehler korrigert,
 
 ####v1.2.0.2 - 26.03.2004
 
 Fehler behoben:
-- Allg. Schutzverletzung beim Öffnen des Import-Dialoges korrigiert.
+- Allg. Schutzverletzung beim Ã–ffnen des Import-Dialoges korrigiert.
 
 ####v1.2.0.2 - 26.03.2004
 
 Fehler behoben:
-- Allg. Schutzverletzung beim Öffnen des Import-Dialoges korrigiert.
+- Allg. Schutzverletzung beim Ã–ffnen des Import-Dialoges korrigiert.
 
 ####v1.2.0.1 - 04.03.2004
 
@@ -104,11 +107,11 @@ Fehler behoben:
 ####v1.2.0.0 - 24.02.2004
 
 Erweiterungen:
-- Die zuletzt verwendete (in ComboBox Importbeschreibung ausgewählte) 
-  Importbeschreibung wird beim Öffnen des Import-Dialoges ausgewählt.
-- Belegnummer und Deg. AfA-Satz können nun importiert werden.
-- Brutto- und/oder Nettobeträge können importiert werden.
-- Hilfe vervollständigt.
+- Die zuletzt verwendete (in ComboBox Importbeschreibung ausgewÃ¤hlte) 
+  Importbeschreibung wird beim Ã–ffnen des Import-Dialoges ausgewÃ¤hlt.
+- Belegnummer und Deg. AfA-Satz kÃ¶nnen nun importiert werden.
+- Brutto- und/oder NettobetrÃ¤ge kÃ¶nnen importiert werden.
+- Hilfe vervollstÃ¤ndigt.
 
 Fehler behoben:
 - Speicherleck gestopft
@@ -117,20 +120,20 @@ Fehler behoben:
 
 Erweiterungen:
 
-- Abschreibung (Dauer und akt. Jahr) können nun importiert werden.
-- Kontext-Hilfe vervollständigt.
+- Abschreibung (Dauer und akt. Jahr) kÃ¶nnen nun importiert werden.
+- Kontext-Hilfe vervollstÃ¤ndigt.
 
 ####v1.0.3.0 - 30.05.2001
 
 Erweiterungen:
-- Fortschritt-Anzeige bei längeren Import-Vorgängen (geschätzte 
-  Zeit > 4 Sekunden). Wird in eigenem Fenster Angezeigt, Möglichkeit
+- Fortschritt-Anzeige bei lÃ¤ngeren Import-VorgÃ¤ngen (geschÃ¤tzte 
+  Zeit > 4 Sekunden). Wird in eigenem Fenster Angezeigt, MÃ¶glichkeit
   zum Abbruch der Aktion.
   
 ####v1.0.3.0 - 13.06.2001
 
 Fehler behoben:
-- Bei der Konvertierung von Währungsbeträgen bestand ein Fehler:
+- Bei der Konvertierung von WÃ¤hrungsbetrÃ¤gen bestand ein Fehler:
   so wurde z. B. aus "122,4" 12,2.
   Fehler behoben.
 
@@ -139,5 +142,5 @@ Fehler behoben:
 Fehler behoben:
 - Fehler bei der Konvertierung von Datumsangaben. Dati mit 
   zweistelliger Jahreszahl wurden nicht konvertiert.
-  Grund dafür war die falsche Ermittlung des aktuellen Jahrhunderts.
+  Grund dafÃ¼r war die falsche Ermittlung des aktuellen Jahrhunderts.
   Fehler behoben.
