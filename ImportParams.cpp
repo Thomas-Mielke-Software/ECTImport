@@ -478,7 +478,6 @@ BOOL CTextFieldConversion::Exchange ( void* Dest )
 	Source = GetFestwert();
   else
 	Source = GetLine().GetAt ( GetSourceFieldID() );
-
   if (Source.GetLength())
   {
     Source.TrimLeft ( (TCHAR) _T(" ") );
