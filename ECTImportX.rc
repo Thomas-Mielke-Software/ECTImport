@@ -57,8 +57,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 5,3,0,1
- PRODUCTVERSION 5,3,0,1
+ FILEVERSION 5,4,0,1
+ PRODUCTVERSION 5,4,0,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -75,12 +75,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Rüdiger Herrmann und Thomas Mielke"
             VALUE "FileDescription", "CSV-Import-Plugin für EasyCash&Tax"
-            VALUE "FileVersion", "5.3.0.1"
+            VALUE "FileVersion", "5.4.0.1"
             VALUE "InternalName", "ECTImportX.ocx"
-            VALUE "LegalCopyright", "Copyright (C) 2001, 2004 Rüdiger Herrmann; (C) 2008-2015 Modifikationen durch Thomas Mielke; LGPL 2.1"
+            VALUE "LegalCopyright", "Copyright (C) 2001, 2004 Rüdiger Herrmann; (C) 2008-2016 Modifikationen durch Thomas Mielke; LGPL 2.1"
             VALUE "OriginalFilename", "ECTImportX.ocx"
             VALUE "ProductName", "CSV-Import-Plugin für EasyCash&Tax"
-            VALUE "ProductVersion", "5.3.0.1"
+            VALUE "ProductVersion", "5.4.0.1"
         END
     END
     BLOCK "VarFileInfo"
@@ -121,9 +121,9 @@ BEGIN
     LTEXT           "Copyright © Rüdiger Herrmann 2001, 2004",IDC_STATIC,41,37,234,8
     LTEXT           "Version 1.0.0.1",IDC_VERSION,41,19,116,8,SS_NOPREFIX
     LTEXT           "Kontakt",IDC_STATIC,41,92,26,8,SS_NOPREFIX
-    ICON            "",IDC_ABOUTICON,7,6,21,20
+    ICON            "",IDC_ABOUTICON,7,6,20,20
     EDITTEXT        IDC_EMAIL,75,92,100,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_TRANSPARENT
-    LTEXT           "Adaptiert auf das neue Plugin-Interface durch Thomas Mielke in 2008, verschiedene neue Features eingebaut in 2009",IDC_STATIC,42,51,243,23
+    LTEXT           "Adaptiert auf das neue Plugin-Interface durch Thomas Mielke in 2008, verschiedene neue Features eingebaut in 2009-2016",IDC_STATIC,42,51,243,23
     LTEXT           "Diese Software unterliegt einer GNU Open Source Lizenz: LGPL 2.1",IDC_STATIC,41,75,244,8
 END
 
