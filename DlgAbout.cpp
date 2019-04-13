@@ -7,7 +7,6 @@
 
 #include "stdafx.h"
 #include "ECTImportX.h"
-#include "ECTImportX.h"
 #include "DlgAbout.h"
 #include "Module.h"
 #include "helpcontextmap.h"
