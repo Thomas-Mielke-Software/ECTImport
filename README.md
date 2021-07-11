@@ -12,6 +12,14 @@ Das erspart das ständige Kopieren ins Plugin-Verzeichnis mit Administratorrecht
 the component from a command prompt with elevated permissions." ist eine normale Ausgabe.
 Ggf. mit RegSrv32 und Admin-Privilegien manuell im CSV-Import-Plugin registrieren.
 
+### Nutzung ###
+
+Im Menü Start findet sich im Feld "Ansicht" die "Plugin"-Schaltfläche. Durch den Pfeil unter dem Puzzelteil lässt sich das Plugin starten.
+
+#### Bei Fehlermeldung ####
+
+Wenn eine Fehlermeldung erscheint, hilft es oft, die Pluginverwaltung zu starten. Dazu einfach auf "Plugin" zu klicken. Dann wird angezeigt, ob Updates verfügbar sind. Ist dies der Fall, sollten alle Updates installiert werden. Danach ist die Fehlermeldung üblicherweise behoben.
+
 ### ToDo ###
 
 Benötigt ECTIFace im Plugin-Verzeichnis, damit das Registrieren funktioniert.
