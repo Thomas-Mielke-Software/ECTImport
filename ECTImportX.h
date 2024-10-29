@@ -26,3 +26,6 @@ extern const GUID CDECL _tlid;
 extern const WORD _wVerMajor;
 extern const WORD _wVerMinor;
 
+// globale Hilfsfunktionen
+extern void Ansi2Utf8(CString ansiText, CStringA& utf8Text);
+extern void Utf8toAnsi(CStringA utf8Text, CString& ansiText);

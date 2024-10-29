@@ -123,6 +123,7 @@ public:
 	afx_msg void OnBnClickedEditgawkscript();
 	afx_msg void OnBnClickedExegawkscript();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnBnClickedUtf8convert();
 };
 
 //{{AFX_INSERT_LOCATION}}

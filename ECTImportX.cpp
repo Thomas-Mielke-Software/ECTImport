@@ -82,3 +82,26 @@ STDAPI DllUnregisterServer(void)
 
 	return NOERROR;
 }
+
+
+// globale Hilfsfunktionen
+
+extern void Ansi2Utf8(CString ansiText, CStringA& utf8Text)
+{
+	// UTF-8-Konvertierung (für Konvertierung in UTF-8 erst mal in UTF-16 konvertieren: CP_ACP -> CP_UTF16 -> CP_UTF8)
+	CStringW utf16String('\0', MultiByteToWideChar(CP_ACP, 0, ansiText.GetBuffer(), -1, NULL, 0));
+	MultiByteToWideChar(CP_ACP, 0, ansiText.GetBuffer(), -1, utf16String.GetBuffer(), utf16String.GetLength());
+	CStringA utf8String('\0', WideCharToMultiByte(CP_UTF8, 0, utf16String.GetBuffer(), -1, NULL, 0, NULL, NULL));
+	WideCharToMultiByte(CP_UTF8, 0, utf16String.GetBuffer(), -1, utf8String.GetBuffer(), utf8String.GetLength(), NULL, NULL);
+	utf8Text = utf8String;
+}
+
+extern void Utf8toAnsi(CStringA utf8Text, CString& ansiText)
+{
+	// UTF-8-Konvertierung (für Konvertierung in ANSI erst mal in UTF-16 konvertieren: CP_UTF8 -> CP_UTF16 -> CP_ACP)
+	CStringW utf16String('\0', MultiByteToWideChar(CP_UTF8, 0, utf8Text.GetBuffer(), -1, NULL, 0));
+	MultiByteToWideChar(CP_UTF8, 0, utf8Text.GetBuffer(), -1, utf16String.GetBuffer(), utf16String.GetLength());
+	CStringA ansiString('\0', WideCharToMultiByte(CP_ACP, 0, utf16String.GetBuffer(), -1, NULL, 0, NULL, NULL));
+	WideCharToMultiByte(CP_ACP, 0, utf16String.GetBuffer(), -1, ansiString.GetBuffer(), ansiString.GetLength(), NULL, NULL);
+	ansiText = ansiString;
+}

@@ -3,22 +3,25 @@
 
 [Setup]
 AppName=CSV-Import
-AppVerName=CSV-Import 5.3
+AppVerName=CSV-Import 6.0
 DiskSpanning=no
 AppPublisher=tm
 AppPublisherURL=http://www.easyct.de
 AppSupportURL=http://www.easyct.de
 AppUpdatesURL=http://www.easyct.de
-DefaultDirName={pf}\EasyCash&Tax\Plugins\CSV-Import
+DefaultDirName={pf}\EasyCash&Tax\Plugins\CSV-Import      
+UsePreviousAppDir=yes
 DefaultGroupName=EasyCash
 OutputBaseFilename=ECTImportXSetup
 OutputDir=.\Setup
-MinVersion=5.0
-; MFC9 greift auf GetFileSizeEx zu, das Win 98 nicht in der kernel.dll hat.
+MinVersion=6.1
 Compression=bzip   
-SignTool=vs6
+SignTool=winsdk10sha1   ; dual sign the 
+SignTool=winsdk10sha256 ; installer
 
 [Files]
+Source: ".\VC_redist.x86.exe"; DestDir: {tmp}; Flags: dontcopy
+
 Source: .\Release\ECTImportX.ocx; DestDir: {app}; Flags: regserver ignoreversion
 Source: .\ECTIFace.dll; DestDir: {app}; Flags: ignoreversion
 ; ECTIFace nur noch benötigt für GetIniFileName
@@ -43,16 +46,6 @@ Root: HKLM; Subkey: Software\Tools\EasyCash\Plugins\CSV-Import; ValueType: strin
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"
 
 [Code]
-// shared code for installing the products
-#include "scripts\products.iss"
-// helper functions
-#include "scripts\products\stringversion.iss"
-#include "scripts\products\winversion.iss"
-#include "scripts\products\fileversion.iss"
-// actual products       
-#include "scripts\products\msiproduct.iss"
-#include "scripts\products\vcredist2013.iss"
-
 function CheckProcessRunning( aProcName,
                               aProcDesc: string ): boolean;
 var
@@ -99,15 +92,26 @@ function InitializeSetup: Boolean;
 begin
   // Do not use any user defined vars in here such as {app}
   Result := not ( CheckProcessRunning( 'EasyCT.exe',      'EasyCash&Tax' ));
-
-	initwinversion();
-  SetForceX86(true); // force 32-bit install of next products
-	vcredist2013();
-	SetForceX86(false); // disable forced 32-bit install again
 end;
 
 
 function InitializeUninstall: Boolean;
 begin
   Result := not ( CheckProcessRunning( 'EasyCT.exe',      'EasyCash&Tax' ));
-end;   
+end;     
+
+function PrepareToInstall(var NeedsRestart: Boolean): string;
+var
+  ExitCode: Integer;  
+begin
+  // a better way to do this would be like here: http://stackoverflow.com/questions/32474205/visual-studio-2015-link-against-mfc42/32524036#32524036
+  ExtractTemporaryFile('VC_redist.x86.exe');
+  // then run the redist from the temp folder; if that fails, return from this handler the error text
+  if not Exec(ExpandConstant('{tmp}\VC_redist.x86.exe'), '/passive /norestart', '', SW_SHOW, ewWaitUntilTerminated, ExitCode) then
+  begin
+    // return the error text
+    Result := 'Setup konnte die VC++ Laufzeitbibliothek nicht installieren. Fehlercode: ' + IntToStr(ExitCode);
+    // exit this function; 
+    Exit;
+  end;
+end; 

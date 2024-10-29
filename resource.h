@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by ECTImportX.rc
+// Von Microsoft Visual C++ generierte Includedatei.
+// Verwendet durch ECTImportX.rc
 //
 #define IDS_ECTIMPORTX                  1
 #define IDD_ABOUTBOX_ECTIMPORTX         1
@@ -147,6 +147,8 @@
 #define IDC_STATIC24                    1064
 #define IDC_STATIC26                    1065
 #define IDC_FIELD_AFADEGSATZ_FORMAT     1066
+#define IDC_VIEWFILECONTENT2            1067
+#define IDC_UTF8CONVERT                 1067
 #define IDC_STATIC27                    1068
 #define IDC_FIELD_AFAGENAUIGKEIT        1069
 #define IDC_STATIC28                    1070
@@ -159,7 +161,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        214
+#define _APS_NEXT_RESOURCE_VALUE        215
 #define _APS_NEXT_COMMAND_VALUE         32768
 #define _APS_NEXT_CONTROL_VALUE         215
 #define _APS_NEXT_SYMED_VALUE           106

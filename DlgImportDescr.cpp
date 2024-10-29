@@ -45,6 +45,7 @@ BEGIN_MESSAGE_MAP(CDlgImportDescr, CImportUIBase)
 	ON_BN_CLICKED(IDC_EDITGAWKSCRIPT, &CDlgImportDescr::OnBnClickedEditgawkscript)
 	ON_BN_CLICKED(IDC_EXEGAWKSCRIPT, &CDlgImportDescr::OnBnClickedExegawkscript)
 	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_UTF8CONVERT, &CDlgImportDescr::OnBnClickedUtf8convert)
 END_MESSAGE_MAP()
 
 
@@ -347,9 +348,10 @@ BOOL CDlgImportDescr::OnInitDialog()
   AddAnchor(IDC_EXEGAWKSCRIPT, TOP_RIGHT);
   AddAnchor(IDC_STATIC2, TOP_LEFT);
   AddAnchor(IDC_SEPARATORCHAR, TOP_LEFT);
-  AddAnchor(IDC_STATIC3, TOP_CENTER);
-  AddAnchor(IDC_NUMHEADERLINES, TOP_CENTER);
-  AddAnchor(IDC_NUMHEADERLINES_SPIN, TOP_CENTER);
+  AddAnchor(IDC_STATIC3, TOP_LEFT);
+  AddAnchor(IDC_NUMHEADERLINES, TOP_LEFT);
+  AddAnchor(IDC_NUMHEADERLINES_SPIN, TOP_LEFT);
+  AddAnchor(IDC_UTF8CONVERT, TOP_RIGHT);
   AddAnchor(IDC_VIEWFILECONTENT, TOP_RIGHT);
   AddAnchor(IDC_STATIC4, TOP_LEFT);
   AddAnchor(IDC_FILECONTENT, TOP_LEFT, BOTTOM_RIGHT);
@@ -791,7 +793,7 @@ BOOL CDlgImportDescr::UpdateFileContent ()
       ColumnTitles.ElementAt ( i ).Format ( IDS_FIELDX, i + 1 );
   }
 #endif
-
+  
   // retrieve column titles
   GetColumnTitles ( &File );
 
@@ -1408,7 +1410,8 @@ void CDlgImportDescr::OnBnClickedExegawkscript()
 			cp2++;
 			cp++;
 		} ich gebs auf! GetShortPathName() stattdessen */ 
-		GetShortPathName(exefilename, exefilenameescaped, sizeof(exefilenameescaped));
+		int nChars = GetShortPathName(exefilename, exefilenameescaped, sizeof(exefilenameescaped));
+		if (nChars == 0) strcpy(exefilenameescaped, exefilename);  // wenn es schon ein "short path" war, einfach kopieren
 		sprintf(commandline, "/C %s -F \"%s\" -f \"%s\" \"%s\" > \"%s.awked\" & pause", exefilenameescaped, SeparatorChar.GetBuffer(0), (LPCTSTR)GawkScript, (LPCTSTR)Filename, (LPCTSTR)Filename);
 		::ShellExecute(NULL, "open", "cmd.exe", commandline, NULL, SW_SHOWNORMAL);
 		Filename += ".awked";
@@ -1461,3 +1464,127 @@ BOOL CDlgImportDescr::OnHelpInfo(HELPINFO* pHelpInfo)
 	return CDialog::OnHelpInfo(pHelpInfo);
 }
 
+//conversion vrom UTF8 to ANSI
+void CDlgImportDescr::OnBnClickedUtf8convert()
+{
+	CFile File;
+	CFileException Error;
+	CFileStatus FileStatus;
+
+	UpdateData(TRUE);
+	try
+	{
+		// remove ".awked" suffix
+		CString OriginalFilename = m_CurrentImportParams->GetFilename();
+		CString Filename = OriginalFilename;
+		if (Filename.Right(6) == ".awked")
+			Filename = Filename.Mid(0, Filename.GetLength() - 6);
+		if (Filename.Right(5) == ".ansi")
+			Filename = Filename.Mid(0, Filename.GetLength() - 5);
+
+		// try to open file
+		if (!File.Open(Filename, CFile::modeRead | CFile::shareDenyWrite, &Error))
+		{
+			LPTSTR MsgBuf = NULL;
+			if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, Error.m_lOsError, 0, (LPTSTR)&MsgBuf, 0, NULL))
+			{
+				AfxMessageBox(MsgBuf);
+				LocalFree(MsgBuf);
+			}
+			return;
+		}
+
+		// is file empty?
+		if (!File.GetStatus(FileStatus))
+			return;
+		if (FileStatus.m_size == 0)
+		{
+			CString csErr;
+			csErr.LoadStringA(IDS_IMPERR_FILE_EMPTY);
+			AfxMessageBox(csErr);
+			File.Close();
+			return;
+		}
+
+		// convert file
+		CStringA Filebuffer;
+		LPVOID cpFilebuffer = Filebuffer.GetBuffer(FileStatus.m_size + 1);
+		UINT nBytesRead = File.Read(cpFilebuffer, FileStatus.m_size);
+		if (nBytesRead != FileStatus.m_size)
+		{	// sollte nicht passieren wegen "CFile::shareDenyWrite"
+			AfxMessageBox(_T("Dateigröße schwankt. Wird die Datei gegenwärtig noch beschrieben? Dann bitte warten bis der Schreibvorgang beendet ist."));
+			File.Close();
+			return;
+		}
+		else
+			((char *)cpFilebuffer)[nBytesRead] = '\0';
+		Filebuffer.ReleaseBuffer();
+
+		// close file
+		File.Close();
+
+		// convert
+		CString FilebufferAnsi;
+		Utf8toAnsi(Filebuffer, FilebufferAnsi);
+
+		// check filename
+		CFile FileAnsi;
+		CString FilenameAnsi = Filename;
+		int posAnsi = FilenameAnsi.Find(".ansi");
+		if (posAnsi >= 0)
+		{
+			AfxMessageBox("Datei wurde anscheinend schon von UTF-8 in das ANSI-Format konvertiert. Bitte das '.ansi' im Dateinamen entfernen, wenn noch einmal konvertiert werden soll.");
+			return;
+		}
+
+		// modify filename to point to converted file
+		FilenameAnsi += ".ansi";
+
+		// try to open file for writing
+		if (!FileAnsi.Open(FilenameAnsi, CFile::modeWrite | CFile::modeCreate, &Error))
+		{
+			LPTSTR MsgBuf = NULL;
+			if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, Error.m_lOsError, 0, (LPTSTR)&MsgBuf, 0, NULL))
+			{
+				AfxMessageBox(MsgBuf);
+				LocalFree(MsgBuf);
+			}
+			return;
+		}
+
+		LPVOID cpFilebufferAnsi;
+		FileAnsi.Write(FilebufferAnsi.GetBuffer(0), FilebufferAnsi.GetLength()-1);
+		FilebufferAnsi.ReleaseBuffer();
+		FileAnsi.Close();
+
+		// Dateinamen in Dialog aktualisieren
+		CString csMessage = "Konvertierung Der Importdatei von UTF-8 nach ANSI erfolgreich. Bitte jetzt '";
+		if (OriginalFilename.Right(6) == ".awked")  // und ggf. .awked-Endung restaurieren
+		{
+			csMessage += "Ausführen";
+			FilenameAnsi += ".awked";
+		}
+		else
+			csMessage += "Anzeigen...";
+		csMessage += "' klicken.";
+		AfxMessageBox(csMessage);
+		m_CurrentImportParams->SetFilename(FilenameAnsi);
+		UpdateData(FALSE);
+	}
+	catch (CFileException* e)
+	{
+		LPTSTR MsgBuf = NULL;
+		if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, e->m_lOsError, 0, (LPTSTR)&MsgBuf, 0, NULL))
+		{
+			AfxMessageBox(MsgBuf);
+			LocalFree(MsgBuf);
+		}
+		delete e;
+		return;
+	}
+	catch (...)
+	{
+		AfxMessageBox(_T("Unerwartete Ausnahme beim Konvertieren der Import-Datei von UTF-8 nach Ansi"));
+		return;
+	}
+}

@@ -2,15 +2,31 @@
 
 ### Compiling ECTImport Plugin ###
 
-Der Code compiliert momentan unter Visual Studio 2013 -- benutze einfach die freie Community Edition
+Der Code compiliert momentan unter Visual Studio 2022 -- benutze einfach die freie Community Edition.
 
-Zum Debuggen ist es empfohlen eine Version von EC&T außerhalb von "C:\Programme (x86)" 
-zu installieren und den Linker-Output-Pfad entsprechend zu setzen. 
-Das erspart das ständige Kopieren ins Plugin-Verzeichnis mit Administratorrechten.
+- ECTElster.sln in VS2022 öffnen
+- Bei den Projekteigenschaften -> Konfigurationseigenschaften -> Bibliotheksverzeichnisse sicherstellen, dass die ein geeignetes SDK für die ucrt library enthalten ist, z.B. *"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17763.0\ucrt\x86"*
+- gleiches unter C/C++ -> Allgemein -> zusätzliche Header-Dateien, z.B. *"C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt"*
 
 "Error MSB8011: Failed to register output. Please try enabling Per-user Redirection or register 
 the component from a command prompt with elevated permissions." ist eine normale Ausgabe.
-Ggf. mit RegSrv32 und Admin-Privilegien manuell im CSV-Import-Plugin registrieren.
+Ggf. mit RegSrv32 und Admin-Privilegien manuell im CSV-Import-Plugin registrieren, wie im Folgenden beschrieben.
+
+#### Registrieren:
+
+Wenn man Visual Studio nicht ständig als Admin laufen lassen will, kann es die .ocx-Datei nicht während des Build-Vorgangs mit registrieren. Das ist nicht schlimm. Man kann es einmal manuell mit regsvr32.exe ECTElster.ocx im Debug-Verzeichnis machen und dann den Fehler ignorieren:
+```
+# für 32-bit den regsvr32 aus dem SysWOW64 benutzen!
+c:\windows\SysWOW64\regsvr32.exe "C:\Pfad\zu\meinen\Softwareprojekten\ECTImport\Debug\ECTElster.ocx"
+```
+
+Für's Debuggen:
+```
+# für 32-bit den regsvr32 aus dem SysWOW64 benutzen!
+c:\windows\SysWOW64\regsvr32.exe "C:\Pfad\zu\meinen\Softwareprojekten\ECTImport\Debug\EasyCTX.ocx"
+```
+
+Siehe dazu auch die beiden .bat-Dateien im Projektverzeichnis.
 
 ### Nutzung ###
 

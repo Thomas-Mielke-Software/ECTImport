@@ -16,7 +16,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
@@ -57,8 +57,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 5,4,0,1
- PRODUCTVERSION 5,4,0,1
+ FILEVERSION 6,0,0,1
+ PRODUCTVERSION 6,0,0,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -75,12 +75,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Rüdiger Herrmann und Thomas Mielke"
             VALUE "FileDescription", "CSV-Import-Plugin für EasyCash&Tax"
-            VALUE "FileVersion", "5.4.0.1"
+            VALUE "FileVersion", "6.0.0.1"
             VALUE "InternalName", "ECTImportX.ocx"
-            VALUE "LegalCopyright", "Copyright (C) 2001, 2004 Rüdiger Herrmann; (C) 2008-2016 Modifikationen durch Thomas Mielke; LGPL 2.1"
+            VALUE "LegalCopyright", "Copyright (C) 2001, 2004 Rüdiger Herrmann; (C) 2008-2024 Modifikationen durch Thomas Mielke; LGPL 2.1"
             VALUE "OriginalFilename", "ECTImportX.ocx"
             VALUE "ProductName", "CSV-Import-Plugin für EasyCash&Tax"
-            VALUE "ProductVersion", "5.4.0.1"
+            VALUE "ProductVersion", "6.0.0.1"
         END
     END
     BLOCK "VarFileInfo"
@@ -99,12 +99,14 @@ END
 // remains consistent on all systems.
 IDI_ABOUTDLL            ICON                    "ECTImportX.ico"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
 
 IDB_ECTIMPORTX          BITMAP                  "ECTImportXCtrl.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -123,7 +125,7 @@ BEGIN
     LTEXT           "Kontakt",IDC_STATIC,41,92,26,8,SS_NOPREFIX
     ICON            "",IDC_ABOUTICON,7,6,20,20
     EDITTEXT        IDC_EMAIL,75,92,100,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_TRANSPARENT
-    LTEXT           "Adaptiert auf das neue Plugin-Interface durch Thomas Mielke in 2008, verschiedene neue Features eingebaut in 2009-2016",IDC_STATIC,42,51,243,23
+    LTEXT           "Adaptiert auf das neue Plugin-Interface durch Thomas Mielke in 2008, verschiedene neue Features eingebaut in 2009-2024",IDC_STATIC,42,51,243,23
     LTEXT           "Diese Software unterliegt einer GNU Open Source Lizenz: LGPL 2.1",IDC_STATIC,41,75,244,8
 END
 
@@ -158,9 +160,9 @@ BEGIN
     PUSHBUTTON      "Durch&suchen...",IDC_SELFILENAME,295,35,60,14
     LTEXT           "&Trennzeichen",IDC_STATIC2,11,54,44,8
     EDITTEXT        IDC_SEPARATORCHAR,56,52,45,12,ES_AUTOHSCROLL
-    LTEXT           "Anzahl Ko&pfzeilen",IDC_STATIC3,149,54,57,8
-    EDITTEXT        IDC_NUMHEADERLINES,211,52,27,14,ES_AUTOHSCROLL
-    CONTROL         "",IDC_NUMHEADERLINES_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,239,52,10,14
+    LTEXT           "Anzahl Ko&pfzeilen",IDC_STATIC3,107,54,57,8
+    EDITTEXT        IDC_NUMHEADERLINES,169,52,27,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_NUMHEADERLINES_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,197,52,10,14
     PUSHBUTTON      "An&zeigen",IDC_VIEWFILECONTENT,295,52,60,14
     LTEXT           "D&ateiinhalt",IDC_STATIC4,7,84,34,8
     CONTROL         "",IDC_FILECONTENT,"SysListView32",LVS_REPORT | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,11,95,342,40,WS_EX_CLIENTEDGE
@@ -234,6 +236,7 @@ BEGIN
     LTEXT           "Für Hilfe eines der Steuerelemente des\r\nPlugins anklicken und F1 drücken!",IDC_STATIC35,41,404,127,16
     CONTROL         "(zur Vorverarbeitung von CSVs, Benutzung ist optional)",IDC_STATIC32,
                     "Static",SS_LEFTNOWORDWRAP | WS_GROUP,105,71,59,10
+    PUSHBUTTON      "&UTF8-Konvert.",IDC_UTF8CONVERT,231,53,60,14
 END
 
 IDD_IMPORTSTATUS DIALOGEX 0, 0, 276, 202
@@ -391,6 +394,22 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_IMPORTDESCR AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_ABOUTBOX_ECTIMPORTX AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // String Table
 //
 
@@ -476,7 +495,7 @@ BEGIN
     IDS_PROGRESS_STATUS_SORTING "Die Buchungen werden sortiert..."
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
