@@ -198,14 +198,11 @@ void CECTImportXCtrl::Init(LONG dokID)
 
 	m_pDoc = dokID;
 
-	// load settings from file
+	// ImportParams-Liste wird nicht mehr hier geladen, sondern in
+	// CDlgImportDescr::OnInitDialog (sobald das gehostete CEinstellung-
+	// OCX via DDX subklassiert ist und über ECT_HoleEinstellung benutzt
+	// werden kann). Wir übergeben dem Dialog nur die leere Liste.
 	m_pImportParamsList = new CImportParamsList;
-	if ( !m_pImportParamsList->LoadFromIniFile() )
-	{
-		// display error message and remove the eventually already loaded items
-		AfxMessageBox ( IDS_ERROR_LOADFROMINIFILE );
-		m_pImportParamsList->RemoveAll();
-	}
 
 	// init CImport
 	m_pImport = new CImport();
@@ -274,9 +271,8 @@ void CECTImportXCtrl::OnDestroy()
 	  if ( m_pImportDlg->m_Result == IDOK || m_pImportDlg->m_Result == IDRETRY )
 		m_pImport->AssignParams ( m_pImportDlg->GetParams() );
 
-	  // save settings
-	  if ( !m_pImportParamsList->SaveToIniFile () ) 
-		AfxMessageBox ( IDS_ERROR_SAVETOINIFILE );
+	  // Speichern der ImportParams-Liste passiert in CDlgImportDescr::OnDestroy,
+	  // solange das gehostete CEinstellung-OCX noch lebt.
 
 	  // depending on list box selection, set bytes in array to 0 or 1 so Execute knows which lines to import
 	  CByteArray* pSelectionArray;

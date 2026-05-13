@@ -124,6 +124,7 @@ public:
 	afx_msg void OnBnClickedExegawkscript();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnBnClickedUtf8convert();
+	afx_msg void OnDestroy();
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -112,19 +112,12 @@ extern "C" void ECTE_Menu ( CEasyCashDoc *pDoc )
   if ( !pDoc )
     return;
 
-  // declare vars 
+  // declare vars
   CImport Import;
-  CImportParamsList ImportParamsList;
+  CImportParamsList ImportParamsList;  // wird in CDlgImportDescr::OnInitDialog
+                                        // aus dem Einstellungs-Cache geladen
   CDlgImportDescr *StandardDlg = NULL;
   int Res;
-
-  // load settings from file
-  if ( !ImportParamsList.LoadFromIniFile() )
-  {
-    // display error message and remove the eventually already loaded items
-    AfxMessageBox ( IDS_ERROR_LOADFROMINIFILE );
-    ImportParamsList.RemoveAll();
-  }
 
   // init CImport
   Import.SetDoc ( pDoc );
@@ -138,11 +131,8 @@ extern "C" void ECTE_Menu ( CEasyCashDoc *pDoc )
   if ( Res == IDOK )
     Import.AssignParams ( StandardDlg->GetParams() );
 
+  // Speichern der ImportParams-Liste passiert in CDlgImportDescr::OnDestroy.
   delete StandardDlg;
-
-  // save settings
-  if ( !ImportParamsList.SaveToIniFile () ) 
-    AfxMessageBox ( IDS_ERROR_SAVETOINIFILE );
 
   // user pressed OK: so do import the stuff
   if ( Res == IDOK ) 

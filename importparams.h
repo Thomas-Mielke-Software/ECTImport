@@ -46,8 +46,8 @@ class CFieldConversion : public CObject {
 
     virtual BOOL Exchange ( void* Dest );
 
-    virtual BOOL LoadFromIniFile ( const CString &Filename, const CString& Sectionname );
-    virtual BOOL SaveToIniFile ( const CString &Filename, const CString& Sectionname );
+    virtual BOOL LoadFromIniFile ( const CString& Sectionname );
+    virtual BOOL SaveToIniFile ( const CString& Sectionname );
 
     virtual void Init();
 
@@ -121,8 +121,8 @@ class CDateFieldConversion : public CFieldConversion {
 
     virtual BOOL Exchange ( void* Dest );
 
-    virtual BOOL LoadFromIniFile ( const CString &Filename, const CString& Sectionname );
-    virtual BOOL SaveToIniFile ( const CString &Filename, const CString& Sectionname );
+    virtual BOOL LoadFromIniFile ( const CString& Sectionname );
+    virtual BOOL SaveToIniFile ( const CString& Sectionname );
 
     virtual void Init();
 
@@ -170,8 +170,8 @@ class CCurrencyFieldConversion : public CFieldConversion {
 
     virtual BOOL Exchange ( void* Dest );
 
-    virtual BOOL LoadFromIniFile ( const CString &Filename, const CString& Sectionname );
-    virtual BOOL SaveToIniFile ( const CString &Filename, const CString& Sectionname );
+    virtual BOOL LoadFromIniFile ( const CString& Sectionname );
+    virtual BOOL SaveToIniFile ( const CString& Sectionname );
 
     virtual void Init();
 
@@ -215,8 +215,8 @@ class CEAFieldConversion : public CFieldConversion {
 
     virtual BOOL Exchange ( void* Dest );
 
-    virtual BOOL LoadFromIniFile ( const CString &Filename, const CString& Sectionname );
-    virtual BOOL SaveToIniFile ( const CString &Filename, const CString& Sectionname );
+    virtual BOOL LoadFromIniFile ( const CString& Sectionname );
+    virtual BOOL SaveToIniFile ( const CString& Sectionname );
 
     virtual void Init();
 
@@ -261,8 +261,8 @@ class CBruttoNettoFieldConversion : public CFieldConversion {
 
     virtual BOOL Exchange ( void* Dest );
 
-    virtual BOOL LoadFromIniFile ( const CString &Filename, const CString& Sectionname );
-    virtual BOOL SaveToIniFile ( const CString &Filename, const CString& Sectionname );
+    virtual BOOL LoadFromIniFile ( const CString& Sectionname );
+    virtual BOOL SaveToIniFile ( const CString& Sectionname );
 
     virtual void Init();
 
@@ -346,8 +346,8 @@ class CImportParams : public CObject {
 
     CImportParams& operator = ( CImportParams& RightSideArgument );  
 
-    BOOL LoadFromIniFile ( const CString &Filename, const CString& Sectionname );
-    BOOL SaveToIniFile ( const CString &Filename, const CString& Sectionname );
+    BOOL LoadFromIniFile ( const CString& Sectionname );
+    BOOL SaveToIniFile ( const CString& Sectionname );
 
     void Init();
 
@@ -407,9 +407,7 @@ class CImportParamsList : public CObArray {
     static inline void BuildSectionname ( CString* Sectionname, const int Number );
 
     BOOL LoadFromIniFile ();
-    BOOL LoadFromIniFile ( const CString &Filename );
     BOOL SaveToIniFile ();
-    BOOL SaveToIniFile ( const CString &Filename );
 
   protected:
 

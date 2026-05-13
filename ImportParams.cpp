@@ -12,6 +12,16 @@
 #include "module.h"
 #include "utils.h"
 
+
+// Helfer: baut den Cache-Schlüssel im Format "[Sektion]Key", den die
+// ActiveX-Schnittstelle (CEinstellung-OCX) bzw. der Engine-Cache versteht.
+static inline CString IniKey ( const CString& Sectionname, LPCTSTR Key )
+{
+  CString result;
+  result.Format ( _T("[%s]%s"), (LPCTSTR)Sectionname, Key );
+  return result;
+}
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
@@ -101,17 +111,17 @@ BOOL CFieldConversion::Exchange ( void* Dest )
 }
 
 
-BOOL CFieldConversion::LoadFromIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CFieldConversion::LoadFromIniFile ( const CString& Sectionname )
 {
-  m_SourceFieldID = GetPrivateProfileInt ( Sectionname, INI_KEYNAME_SOURCEFIELDID + GetName(), -1, Filename );
+  m_SourceFieldID = ECT_HoleEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_SOURCEFIELDID + GetName() ), -1 );
 
   return TRUE;
 }
 
 
-BOOL CFieldConversion::SaveToIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CFieldConversion::SaveToIniFile ( const CString& Sectionname )
 {
-  WritePrivateProfileInt ( Sectionname, INI_KEYNAME_SOURCEFIELDID + GetName(), m_SourceFieldID, Filename );
+  ECT_SpeichereEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_SOURCEFIELDID + GetName() ), m_SourceFieldID );
 
   return TRUE;
 }
@@ -404,28 +414,29 @@ BOOL CDateFieldConversion::Exchange ( void* Dest )
 }
 
 
-BOOL CDateFieldConversion::LoadFromIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CDateFieldConversion::LoadFromIniFile ( const CString& Sectionname )
 {
-  if ( !CFieldConversion::LoadFromIniFile ( Filename, Sectionname ) )
+  if ( !CFieldConversion::LoadFromIniFile ( Sectionname ) )
     return FALSE;
-  
-  m_Format = (CDateFieldConversion::DateFormat) GetPrivateProfileInt ( Sectionname, INI_KEYNAME_DATEFORMAT, dfDMYY, Filename );
 
-  if ( !GetPrivateProfileString ( Sectionname, INI_KEYNAME_DATEDELIMITER, _T("."), &m_Delimiter, Filename ) )
-    return FALSE;
+  m_Format = (CDateFieldConversion::DateFormat) ECT_HoleEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_DATEFORMAT ), dfDMYY );
+
+  m_Delimiter = ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_DATEDELIMITER ) );
+  if ( m_Delimiter.IsEmpty() )
+    m_Delimiter = _T(".");
 
   return TRUE;
 }
 
 
-BOOL CDateFieldConversion::SaveToIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CDateFieldConversion::SaveToIniFile ( const CString& Sectionname )
 {
-  if ( !CFieldConversion::SaveToIniFile ( Filename, Sectionname ) )
+  if ( !CFieldConversion::SaveToIniFile ( Sectionname ) )
     return FALSE;
-  
-  WritePrivateProfileInt ( Sectionname, INI_KEYNAME_DATEFORMAT, m_Format, Filename );
 
-  WritePrivateProfileString ( Sectionname, INI_KEYNAME_DATEDELIMITER, m_Delimiter, Filename );
+  ECT_SpeichereEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_DATEFORMAT ), m_Format );
+
+  ECT_SpeichereEinstellung ( IniKey ( Sectionname, INI_KEYNAME_DATEDELIMITER ), m_Delimiter );
 
   return TRUE;
 }
@@ -644,23 +655,23 @@ BOOL CCurrencyFieldConversion::Exchange ( void* Dest )
 }
 
 
-BOOL CCurrencyFieldConversion::LoadFromIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CCurrencyFieldConversion::LoadFromIniFile ( const CString& Sectionname )
 {
-  if ( !CFieldConversion::LoadFromIniFile ( Filename, Sectionname ) )
+  if ( !CFieldConversion::LoadFromIniFile ( Sectionname ) )
     return FALSE;
-  
-  m_Format = (CCurrencyFieldConversion::CurrencyFormat) GetPrivateProfileInt ( Sectionname, INI_KEYNAME_CURRENCYFORMAT, cfGerman, Filename );
+
+  m_Format = (CCurrencyFieldConversion::CurrencyFormat) ECT_HoleEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_CURRENCYFORMAT ), cfGerman );
 
   return TRUE;
 }
 
 
-BOOL CCurrencyFieldConversion::SaveToIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CCurrencyFieldConversion::SaveToIniFile ( const CString& Sectionname )
 {
-  if ( !CFieldConversion::SaveToIniFile ( Filename, Sectionname ) )
+  if ( !CFieldConversion::SaveToIniFile ( Sectionname ) )
     return FALSE;
-  
-  WritePrivateProfileInt ( Sectionname, INI_KEYNAME_CURRENCYFORMAT, m_Format, Filename );
+
+  ECT_SpeichereEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_CURRENCYFORMAT ), m_Format );
 
   return TRUE;
 }
@@ -787,33 +798,29 @@ BOOL CEAFieldConversion::Exchange ( void* Dest )
 }
 
 
-BOOL CEAFieldConversion::LoadFromIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CEAFieldConversion::LoadFromIniFile ( const CString& Sectionname )
 {
-  if ( !CFieldConversion::LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-  
-  m_ConversionRule = (CEAFieldConversion::ConversionRule) GetPrivateProfileInt ( Sectionname, INI_KEYNAME_CONVERSIONRULE_INCOMEEXPENSE, cUseFormat, Filename );
-
-  if ( !GetPrivateProfileString ( Sectionname, INI_KEYNAME_FORMATEINNAHME, _T(""), &m_FormatIncome, Filename ) )
+  if ( !CFieldConversion::LoadFromIniFile ( Sectionname ) )
     return FALSE;
 
-  if ( !GetPrivateProfileString ( Sectionname, INI_KEYNAME_FORMATAUSGABE, _T(""), &m_FormatExpense, Filename ) )
-    return FALSE;
+  m_ConversionRule = (CEAFieldConversion::ConversionRule) ECT_HoleEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_CONVERSIONRULE_INCOMEEXPENSE ), cUseFormat );
+
+  m_FormatIncome  = ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_FORMATEINNAHME ) );
+  m_FormatExpense = ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_FORMATAUSGABE ) );
 
   return TRUE;
 }
 
 
-BOOL CEAFieldConversion::SaveToIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CEAFieldConversion::SaveToIniFile ( const CString& Sectionname )
 {
-  if ( !CFieldConversion::SaveToIniFile ( Filename, Sectionname ) )
+  if ( !CFieldConversion::SaveToIniFile ( Sectionname ) )
     return FALSE;
-  
-  WritePrivateProfileInt ( Sectionname, INI_KEYNAME_CONVERSIONRULE_INCOMEEXPENSE, m_ConversionRule, Filename );
 
-  WritePrivateProfileString ( Sectionname, INI_KEYNAME_FORMATEINNAHME, m_FormatIncome, Filename );
+  ECT_SpeichereEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_CONVERSIONRULE_INCOMEEXPENSE ), m_ConversionRule );
 
-  WritePrivateProfileString ( Sectionname, INI_KEYNAME_FORMATAUSGABE, m_FormatExpense, Filename );
+  ECT_SpeichereEinstellung ( IniKey ( Sectionname, INI_KEYNAME_FORMATEINNAHME ), m_FormatIncome );
+  ECT_SpeichereEinstellung ( IniKey ( Sectionname, INI_KEYNAME_FORMATAUSGABE ), m_FormatExpense );
 
   return TRUE;
 }
@@ -938,33 +945,29 @@ BOOL CBruttoNettoFieldConversion::Exchange ( void* Dest )
 }
 
 
-BOOL CBruttoNettoFieldConversion::LoadFromIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CBruttoNettoFieldConversion::LoadFromIniFile ( const CString& Sectionname )
 {
-  if ( !CFieldConversion::LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-  
-  m_ConversionRule = (CBruttoNettoFieldConversion::ConversionRule) GetPrivateProfileInt ( Sectionname, INI_KEYNAME_CONVERSIONRULE_BRUTTONETTO, cUseFormat, Filename );
-
-  if ( !GetPrivateProfileString ( Sectionname, INI_KEYNAME_FORMATBRUTTO, _T(""), &m_FormatBrutto, Filename ) )
+  if ( !CFieldConversion::LoadFromIniFile ( Sectionname ) )
     return FALSE;
 
-  if ( !GetPrivateProfileString ( Sectionname, INI_KEYNAME_FORMATNETTO, _T(""), &m_FormatNetto, Filename ) )
-    return FALSE;
+  m_ConversionRule = (CBruttoNettoFieldConversion::ConversionRule) ECT_HoleEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_CONVERSIONRULE_BRUTTONETTO ), cUseFormat );
+
+  m_FormatBrutto = ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_FORMATBRUTTO ) );
+  m_FormatNetto  = ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_FORMATNETTO ) );
 
   return TRUE;
 }
 
 
-BOOL CBruttoNettoFieldConversion::SaveToIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CBruttoNettoFieldConversion::SaveToIniFile ( const CString& Sectionname )
 {
-  if ( !CFieldConversion::SaveToIniFile ( Filename, Sectionname ) )
+  if ( !CFieldConversion::SaveToIniFile ( Sectionname ) )
     return FALSE;
-  
-  WritePrivateProfileInt ( Sectionname, INI_KEYNAME_CONVERSIONRULE_BRUTTONETTO, m_ConversionRule, Filename );
 
-  WritePrivateProfileString ( Sectionname, INI_KEYNAME_FORMATBRUTTO, m_FormatBrutto, Filename );
+  ECT_SpeichereEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_CONVERSIONRULE_BRUTTONETTO ), m_ConversionRule );
 
-  WritePrivateProfileString ( Sectionname, INI_KEYNAME_FORMATNETTO, m_FormatNetto, Filename );
+  ECT_SpeichereEinstellung ( IniKey ( Sectionname, INI_KEYNAME_FORMATBRUTTO ), m_FormatBrutto );
+  ECT_SpeichereEinstellung ( IniKey ( Sectionname, INI_KEYNAME_FORMATNETTO ),  m_FormatNetto );
 
   return TRUE;
 }
@@ -1161,161 +1164,91 @@ CImportParams& CImportParams::operator = ( CImportParams& RightSideArgument )
 }
 
 
-BOOL CImportParams::LoadFromIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CImportParams::LoadFromIniFile ( const CString& Sectionname )
 {
   Init();
-  
-  if ( !GetPrivateProfileString ( Sectionname, INI_KEYNAME_NAME, m_Name, &m_Name, Filename ) )
-    return FALSE;
 
-  if ( !GetPrivateProfileString ( Sectionname, INI_KEYNAME_SEPARATIR, m_SeparatorChar, &m_SeparatorChar, Filename ) )
-    return FALSE;
-  
-  if ( !GetPrivateProfileString ( Sectionname, INI_KEYNAME_FILENAME, m_Filename, &m_Filename, Filename ) )
-    return FALSE;
-  
-  if ( !GetPrivateProfileString ( Sectionname, INI_KEYNAME_GAWKSCRIPT, m_GawkScript, &m_GawkScript, Filename ) )
-    return FALSE;
+  m_Name          = ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_NAME ) );
+  m_SeparatorChar = ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_SEPARATIR ) );
+  m_Filename      = ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_FILENAME ) );
+  m_GawkScript    = ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_GAWKSCRIPT ) );
 
-  m_HeaderCount = GetPrivateProfileInt ( Sectionname, INI_KEYNAME_HEADERCOUNT, m_HeaderCount, Filename );
+  m_HeaderCount = ECT_HoleEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_HEADERCOUNT ), m_HeaderCount );
 
   int i = 0;
   CString KeyName, Value;
-  while ( TRUE ) {
-    KeyName.Format ("%s%d", INI_KEYNAME_COLUMNNAME, i );
-    if ( !GetPrivateProfileString ( Sectionname, KeyName, _T("_***_"), &Value, Filename ) )
-      return FALSE;
-
-    if ( Value == _T("_***_") )
+  while ( TRUE )
+  {
+    KeyName.Format ( _T("%s%d"), INI_KEYNAME_COLUMNNAME, i );
+    Value = ECT_HoleEinstellung ( IniKey ( Sectionname, KeyName ) );
+    if ( Value.IsEmpty() )
       break;
 
     m_ColumnNames.Add ( Value );
 
-    KeyName.Format ("%s%d", INI_KEYNAME_COLUMNWIDTH, i );
-    SetColumnWidth ( i, GetPrivateProfileInt ( Sectionname, KeyName, 0, Filename ) );
+    KeyName.Format ( _T("%s%d"), INI_KEYNAME_COLUMNWIDTH, i );
+    SetColumnWidth ( i, ECT_HoleEinstellungInt ( IniKey ( Sectionname, KeyName ), 0 ) );
 
-     i++;
+    i++;
   }
 
-  if ( !m_FieldEA.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldDatum.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldBetrag.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldBruttoNetto.LoadFromIniFile( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldBeschreibung.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-  
-  if ( !m_FieldBelegnummer.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldKonto.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldSteuersatz.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldAfAAktJahr.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldAfADauer.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldAfADegSatz.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldAfARestwert.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldAfAGenauigkeit.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldBetrieb.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldBestandskonto.LoadFromIniFile ( Filename, Sectionname ) )
-    return FALSE;
+  if ( !m_FieldEA.LoadFromIniFile ( Sectionname ) )            return FALSE;
+  if ( !m_FieldDatum.LoadFromIniFile ( Sectionname ) )         return FALSE;
+  if ( !m_FieldBetrag.LoadFromIniFile ( Sectionname ) )        return FALSE;
+  if ( !m_FieldBruttoNetto.LoadFromIniFile ( Sectionname ) )   return FALSE;
+  if ( !m_FieldBeschreibung.LoadFromIniFile ( Sectionname ) )  return FALSE;
+  if ( !m_FieldBelegnummer.LoadFromIniFile ( Sectionname ) )   return FALSE;
+  if ( !m_FieldKonto.LoadFromIniFile ( Sectionname ) )         return FALSE;
+  if ( !m_FieldSteuersatz.LoadFromIniFile ( Sectionname ) )    return FALSE;
+  if ( !m_FieldAfAAktJahr.LoadFromIniFile ( Sectionname ) )    return FALSE;
+  if ( !m_FieldAfADauer.LoadFromIniFile ( Sectionname ) )      return FALSE;
+  if ( !m_FieldAfADegSatz.LoadFromIniFile ( Sectionname ) )    return FALSE;
+  if ( !m_FieldAfARestwert.LoadFromIniFile ( Sectionname ) )   return FALSE;
+  if ( !m_FieldAfAGenauigkeit.LoadFromIniFile ( Sectionname ) )return FALSE;
+  if ( !m_FieldBetrieb.LoadFromIniFile ( Sectionname ) )       return FALSE;
+  if ( !m_FieldBestandskonto.LoadFromIniFile ( Sectionname ) ) return FALSE;
 
   return TRUE;
 }
 
 
-BOOL CImportParams::SaveToIniFile ( const CString &Filename, const CString& Sectionname )
+BOOL CImportParams::SaveToIniFile ( const CString& Sectionname )
 {
-  WritePrivateProfileString ( Sectionname, INI_KEYNAME_NAME, m_Name, Filename );
+  ECT_SpeichereEinstellung    ( IniKey ( Sectionname, INI_KEYNAME_NAME ),        m_Name );
+  ECT_SpeichereEinstellung    ( IniKey ( Sectionname, INI_KEYNAME_SEPARATIR ),   m_SeparatorChar );
+  ECT_SpeichereEinstellung    ( IniKey ( Sectionname, INI_KEYNAME_FILENAME ),    m_Filename );
+  ECT_SpeichereEinstellung    ( IniKey ( Sectionname, INI_KEYNAME_GAWKSCRIPT ),  m_GawkScript );
+  ECT_SpeichereEinstellungInt ( IniKey ( Sectionname, INI_KEYNAME_HEADERCOUNT ), m_HeaderCount );
 
-  WritePrivateProfileString ( Sectionname, INI_KEYNAME_SEPARATIR, m_SeparatorChar, Filename );
-  
-  WritePrivateProfileString ( Sectionname, INI_KEYNAME_FILENAME, m_Filename, Filename );
-
-  WritePrivateProfileString ( Sectionname, INI_KEYNAME_GAWKSCRIPT, m_GawkScript, Filename );
-  
-  WritePrivateProfileInt ( Sectionname, INI_KEYNAME_HEADERCOUNT, m_HeaderCount, Filename );
-  
   int i;
   CString KeyName;
   for ( i = 0; i <= m_ColumnNames.GetSize() - 1; i++ )
   {
-    KeyName.Format ("%s%d", INI_KEYNAME_COLUMNNAME, i );
-    WritePrivateProfileString ( Sectionname, KeyName, m_ColumnNames.GetAt ( i ), Filename );
+    KeyName.Format ( _T("%s%d"), INI_KEYNAME_COLUMNNAME, i );
+    ECT_SpeichereEinstellung ( IniKey ( Sectionname, KeyName ), m_ColumnNames.GetAt ( i ) );
 
-	if (GetColumnWidth( i ))
-	{
-		KeyName.Format ("%s%d", INI_KEYNAME_COLUMNWIDTH, i );
-		WritePrivateProfileInt ( Sectionname, KeyName, GetColumnWidth( i ), Filename );	
-	}
+    if ( GetColumnWidth ( i ) )
+    {
+      KeyName.Format ( _T("%s%d"), INI_KEYNAME_COLUMNWIDTH, i );
+      ECT_SpeichereEinstellungInt ( IniKey ( Sectionname, KeyName ), GetColumnWidth ( i ) );
+    }
   }
 
-  if ( !m_FieldEA.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldDatum.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldBetrag.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldBruttoNetto.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldBeschreibung.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldBelegnummer.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldKonto.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldSteuersatz.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldAfAAktJahr.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldAfADauer.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldAfADegSatz.SaveToIniFile ( Filename, Sectionname ) )
-    return FALSE;
-
-  if ( !m_FieldAfARestwert.SaveToIniFile ( Filename, Sectionname ) ) 
-    return FALSE;
-
-  if ( !m_FieldAfAGenauigkeit.SaveToIniFile ( Filename, Sectionname ) ) 
-    return FALSE;
-
-  if ( !m_FieldBetrieb.SaveToIniFile ( Filename, Sectionname ) ) 
-    return FALSE;
-
-  if ( !m_FieldBestandskonto.SaveToIniFile ( Filename, Sectionname ) ) 
-    return FALSE;
+  if ( !m_FieldEA.SaveToIniFile ( Sectionname ) )            return FALSE;
+  if ( !m_FieldDatum.SaveToIniFile ( Sectionname ) )         return FALSE;
+  if ( !m_FieldBetrag.SaveToIniFile ( Sectionname ) )        return FALSE;
+  if ( !m_FieldBruttoNetto.SaveToIniFile ( Sectionname ) )   return FALSE;
+  if ( !m_FieldBeschreibung.SaveToIniFile ( Sectionname ) )  return FALSE;
+  if ( !m_FieldBelegnummer.SaveToIniFile ( Sectionname ) )   return FALSE;
+  if ( !m_FieldKonto.SaveToIniFile ( Sectionname ) )         return FALSE;
+  if ( !m_FieldSteuersatz.SaveToIniFile ( Sectionname ) )    return FALSE;
+  if ( !m_FieldAfAAktJahr.SaveToIniFile ( Sectionname ) )    return FALSE;
+  if ( !m_FieldAfADauer.SaveToIniFile ( Sectionname ) )      return FALSE;
+  if ( !m_FieldAfADegSatz.SaveToIniFile ( Sectionname ) )    return FALSE;
+  if ( !m_FieldAfARestwert.SaveToIniFile ( Sectionname ) )   return FALSE;
+  if ( !m_FieldAfAGenauigkeit.SaveToIniFile ( Sectionname ) )return FALSE;
+  if ( !m_FieldBetrieb.SaveToIniFile ( Sectionname ) )       return FALSE;
+  if ( !m_FieldBestandskonto.SaveToIniFile ( Sectionname ) ) return FALSE;
 
   return TRUE;
 }
@@ -1417,118 +1350,75 @@ void CImportParamsList::BuildSectionname ( CString* Sectionname, const int Numbe
 
 BOOL CImportParamsList::LoadFromIniFile ()
 {
-  CString Filename;
-
-  if ( !GetIniFileName ( Filename.GetBuffer ( MAX_PATH ), MAX_PATH ) )
-    return FALSE;
-  Filename.ReleaseBuffer();
-
-  if ( Filename.IsEmpty() )
-    return FALSE;
-
-  return LoadFromIniFile ( Filename );
-}
-
-
-BOOL CImportParamsList::LoadFromIniFile ( const CString &Filename )
-{
-  // declare variables
-  int i;
+  // Liest die ImportParams aus dem Engine-Cache. Da der Cache vom Host
+  // (EasyCash.exe) beim Setzen des Mandanten-Datenverzeichnisses bereits
+  // befüllt wurde, brauchen wir hier keinen Filename und auch keine
+  // GetIniFileName-Aufloesung mehr.
+  int i = 0;
   CString Sectionname;
-  CString DefaultImportParamsName;
-  i = 0;
-  
-  while ( TRUE ) {
+
+  while ( TRUE )
+  {
     BuildSectionname ( &Sectionname, i );
-    
-    if ( !ExistsPrivateProfileSection ( Sectionname, Filename ) )
+
+    // Sektion existiert, wenn der Name-Eintrag nicht leer ist.
+    if ( ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_NAME ) ).IsEmpty() )
       break;
 
     CImportParams* NewEntry = new CImportParams();
     Add ( NewEntry );
 
-    if ( !NewEntry->LoadFromIniFile ( Filename, Sectionname ) )
+    if ( !NewEntry->LoadFromIniFile ( Sectionname ) )
       return FALSE;
     i++;
   }
 
-  //
   m_DefaultImportParams = NULL;
-  if ( !GetPrivateProfileString ( SEC_CSVIMPORT, KEY_DEFAULT_IMPORT_PARAMS, _T(""), &DefaultImportParamsName, Filename ) )
-    return FALSE;
+  CString DefaultImportParamsName = ECT_HoleEinstellung (
+    IniKey ( SEC_CSVIMPORT, KEY_DEFAULT_IMPORT_PARAMS ) );
   if ( !DefaultImportParamsName.IsEmpty() )
   {
-    int defaultImportParamsIndex = FindByName( DefaultImportParamsName );
+    int defaultImportParamsIndex = FindByName ( DefaultImportParamsName );
     if ( defaultImportParamsIndex != -1 )
-      m_DefaultImportParams = (CImportParams*) GetAt( defaultImportParamsIndex );
+      m_DefaultImportParams = (CImportParams*) GetAt ( defaultImportParamsIndex );
   }
 
   return TRUE;
 }
 
 
-
 BOOL CImportParamsList::SaveToIniFile ()
 {
-  CString Filename;
-
-  if ( !GetIniFileName ( Filename.GetBuffer ( MAX_PATH ), MAX_PATH ) )
-    return FALSE;
-  Filename.ReleaseBuffer();
-
-  if ( Filename.IsEmpty() )
-    return FALSE;
-
-  return SaveToIniFile ( Filename );
-}
-
-
-BOOL CImportParamsList::SaveToIniFile ( const CString &Filename )
-{
-  // declare variables
   int i;
   CString Sectionname;
 
-  // delete previously saved import descriptions
-  i = 0;
+  // Aktuelle Liste in die Sektionen 0..N-1 schreiben.
+  for ( i = 0; i <= GetSize() - 1; i++ )
+  {
+    BuildSectionname ( &Sectionname, i );
+    if ( !( (CImportParams*) GetAt ( i ) )->SaveToIniFile ( Sectionname ) )
+      return FALSE;
+  }
+
+  // Ehemals längere Listen: Name der Folgesektion leeren, damit Load
+  // hier abbricht. (Die ActiveX-Schnittstelle kennt keinen "Sektion
+  // löschen"-Aufruf; das Leeren des Name-Schlüssels ist der natürliche
+  // Listen-Terminator und mirror des früheren WritePrivateProfileString
+  // (Section, NULL, NULL, ...)-Aufrufs.)
+  i = GetSize();
   while ( TRUE )
   {
-    // build section name
     BuildSectionname ( &Sectionname, i );
-    
-    // stop processing if section doesn't exist
-    if ( !ExistsPrivateProfileSection ( Sectionname, Filename ) )
+    if ( ECT_HoleEinstellung ( IniKey ( Sectionname, INI_KEYNAME_NAME ) ).IsEmpty() )
       break;
-
-    // delete section
-    if ( !WritePrivateProfileString ( Sectionname, NULL, NULL, Filename ) && GetLastError != ERROR_SUCCESS )
-      return FALSE;
-
+    ECT_SpeichereEinstellung ( IniKey ( Sectionname, INI_KEYNAME_NAME ), _T("") );
     i++;
   }
 
-  // store settings for each import description
-  for ( i = 0; i <= GetSize() - 1; i++ )
-  {
-    // build section name
-    BuildSectionname ( &Sectionname, i );
-
-    // save a single import description
-    if ( !( (CImportParams*) GetAt ( i ) )->SaveToIniFile ( Filename, Sectionname ) )
-      return FALSE;
-  }
-
-  // store default import description (normally the last one that was selected)
-  if ( m_DefaultImportParams == NULL )
-  {
-    if ( !WritePrivateProfileString( SEC_CSVIMPORT, KEY_DEFAULT_IMPORT_PARAMS, _T(""), Filename ) )
-      return FALSE;
-  }
-  else
-  {
-    if ( !WritePrivateProfileString( SEC_CSVIMPORT, KEY_DEFAULT_IMPORT_PARAMS, m_DefaultImportParams->GetName(), Filename ) )
-      return FALSE;
-  }
+  // Default-ImportParams ablegen.
+  ECT_SpeichereEinstellung (
+    IniKey ( SEC_CSVIMPORT, KEY_DEFAULT_IMPORT_PARAMS ),
+    m_DefaultImportParams ? (LPCTSTR)m_DefaultImportParams->GetName() : _T("") );
 
   return TRUE;
 }

@@ -15,6 +15,7 @@
 #include "DlgAbout.h"
 #include "module.h"
 #include "helpcontextmap.h"
+#include "utils.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -46,6 +47,7 @@ BEGIN_MESSAGE_MAP(CDlgImportDescr, CImportUIBase)
 	ON_BN_CLICKED(IDC_EXEGAWKSCRIPT, &CDlgImportDescr::OnBnClickedExegawkscript)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_UTF8CONVERT, &CDlgImportDescr::OnBnClickedUtf8convert)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -281,7 +283,24 @@ BOOL CDlgImportDescr::OnInitDialog()
 {
 	// call inherited
   CImportUIBase::OnInitDialog();
-	
+
+  // Sicherstellen, dass DDX_Control gelaufen ist und m_EinstellungCtrl
+  // ein gültiges HWND besitzt. Erst danach können ECT_HoleEinstellung/
+  // ECT_SpeichereEinstellung über das gehostete OCX laufen.
+  UpdateData ( FALSE );
+
+  // Den jetzt lebendigen Einstellungs-Control für ImportParams etc. anmelden.
+  ECT_SetEinstellungCtrl ( &m_EinstellungCtrl );
+
+  // ImportParams-Liste aus dem Einstellungs-Cache laden. Wir tun das hier
+  // (und nicht mehr im Aufrufer vor dem Dialog), weil das OCX erst nach DDX
+  // ansprechbar ist (OLEMISC_SETCLIENTSITEFIRST).
+  if ( m_ImportParamsList && !m_ImportParamsList->LoadFromIniFile() )
+  {
+    AfxMessageBox ( IDS_ERROR_LOADFROMINIFILE );
+    m_ImportParamsList->RemoveAll();
+  }
+
   // init controls
   m_SeparatorChar.SetLimitText ( 10 );
   m_FileContent.SetExtendedStyle ( m_FileContent.GetExtendedStyle() | LVS_EX_FULLROWSELECT );
@@ -732,7 +751,7 @@ void CDlgImportDescr::UpdateFileContentColumnWidths(void)
     for ( col = 0; col <= m_CurrentImportParams->GetColumnNames()->GetSize() - 1; col++ )
 	{
 		int nFesteSpaltenbreite = m_CurrentImportParams->GetColumnWidth(col);	// hat mal ein Benutzer die Spaltenbreite manuell verändert? Dann diesen Wert bevorzugen und fixieren!
-		nPlatzbedarf += nFesteSpaltenbreite ? nFesteSpaltenbreite : m_FileContent.GetStringWidth ( m_CurrentImportParams->GetColumnNames()->GetAt ( col ));	// ansonsten übern Daumen peilen
+		nPlatzbedarf += nFesteSpaltenbreite ? nFesteSpaltenbreite : m_FileContent.GetStringWidth ( m_CurrentImportParams->GetColumnNames()->GetAt ( col ));	// ansonsten ï¿½bern Daumen peilen
 	}
 	int nSpielraumProSpalte = (nFileContentBreite - nPlatzbedarf) / m_CurrentImportParams->GetColumnNames()->GetSize();
     for ( col = 0; col <= m_CurrentImportParams->GetColumnNames()->GetSize() - 1; col++ )
@@ -1587,4 +1606,18 @@ void CDlgImportDescr::OnBnClickedUtf8convert()
 		AfxMessageBox(_T("Unerwartete Ausnahme beim Konvertieren der Import-Datei von UTF-8 nach Ansi"));
 		return;
 	}
+}
+
+void CDlgImportDescr::OnDestroy()
+{
+	// Solange m_EinstellungCtrl noch lebt (Kind-HWNDs werden erst nach dem
+	// WM_DESTROY-Handler des Eltern-Fensters zerstört), die ImportParams-
+	// Liste in den Einstellungs-Cache zurueckschreiben.
+	if ( m_ImportParamsList && !m_ImportParamsList->SaveToIniFile() )
+		AfxMessageBox ( IDS_ERROR_SAVETOINIFILE );
+
+	// Den globalen Zeiger abmelden, bevor das Control verschwindet.
+	ECT_SetEinstellungCtrl ( NULL );
+
+	CImportUIBase::OnDestroy();
 }
