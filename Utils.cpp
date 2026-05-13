@@ -2,12 +2,12 @@
 // Name:        utils.cpp
 // Purpose:     utility routines
 // Author:      Ruediger Herrmann
-// Dopyright:   (c) Ruediger Herrmann
+// Copyright:   (c) Ruediger Herrmann
 //////////////////////////////////////////////////////////////////////////////*/
 
 
 #include "stdafx.h"
-#include "EinstellungDtrl.h"
+#include "EinstellungCtrl.h"
 #include "utils.h"
 
 #ifdef _DEBUG
@@ -18,48 +18,49 @@ static char THIS_FILE[]=__FILE__;
 
 
 // -----------------------------------------------------------------------------
-// Statischer Zeiger auf das vom Dialog gehostete DEinstellung-Dontrol.
-// DDlgImportDescr::OnInitDialog setzt ihn, DDlgImportDescr::OnDestroy raeumt ihn.
+// Statischer Zeiger auf das vom Dialog gehostete CEinstellung-Control.
+// CDlgImportDescr::OnInitDialog setzt ihn, CDlgImportDescr::OnDestroy räumt
+// ihn wieder ab.
 // -----------------------------------------------------------------------------
-static DEinstellung* s_pEinstellungDtrl = NULL;
+static CEinstellung* s_pEinstellungCtrl = NULL;
 
 
-void EDT_SetEinstellungDtrl ( DEinstellung* pDtrl )
+void ECT_SetEinstellungCtrl ( CEinstellung* pCtrl )
 {
-  s_pEinstellungDtrl = pDtrl;
+  s_pEinstellungCtrl = pCtrl;
 }
 
 
-DString EDT_HoleEinstellung ( LPDTSTR Key )
+CString ECT_HoleEinstellung ( LPCTSTR Key )
 {
-  if ( !s_pEinstellungDtrl || !s_pEinstellungDtrl->GetSafeHwnd() || !Key )
-    return DString();
-  return s_pEinstellungDtrl->HoleEinstellung ( Key );
+  if ( !s_pEinstellungCtrl || !s_pEinstellungCtrl->GetSafeHwnd() || !Key )
+    return CString();
+  return s_pEinstellungCtrl->HoleEinstellung ( Key );
 }
 
 
-void EDT_SpeichereEinstellung ( LPDTSTR Key, LPDTSTR Wert )
+void ECT_SpeichereEinstellung ( LPCTSTR Key, LPCTSTR Wert )
 {
-  if ( !s_pEinstellungDtrl || !s_pEinstellungDtrl->GetSafeHwnd() || !Key )
+  if ( !s_pEinstellungCtrl || !s_pEinstellungCtrl->GetSafeHwnd() || !Key )
     return;
-  s_pEinstellungDtrl->SpeichereEinstellung ( Key, Wert ? Wert : _T("") );
+  s_pEinstellungCtrl->SpeichereEinstellung ( Key, Wert ? Wert : _T("") );
 }
 
 
-int EDT_HoleEinstellungInt ( LPDTSTR Key, int DefaultValue )
+int ECT_HoleEinstellungInt ( LPCTSTR Key, int DefaultValue )
 {
-  DString s = EDT_HoleEinstellung ( Key );
+  CString s = ECT_HoleEinstellung ( Key );
   if ( s.IsEmpty() )
     return DefaultValue;
   return _ttoi ( s );
 }
 
 
-void EDT_SpeichereEinstellungInt ( LPDTSTR Key, int Value )
+void ECT_SpeichereEinstellungInt ( LPCTSTR Key, int Value )
 {
-  DString s;
+  CString s;
   s.Format ( _T("%d"), Value );
-  EDT_SpeichereEinstellung ( Key, s );
+  ECT_SpeichereEinstellung ( Key, s );
 }
 
 

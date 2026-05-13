@@ -200,8 +200,8 @@ void CECTImportXCtrl::Init(LONG dokID)
 
 	// ImportParams-Liste wird nicht mehr hier geladen, sondern in
 	// CDlgImportDescr::OnInitDialog (sobald das gehostete CEinstellung-
-	// OCX via DDX subklassiert ist und �ber ECT_HoleEinstellung benutzt
-	// werden kann). Wir �bergeben dem Dialog nur die leere Liste.
+	// OCX via DDX subklassiert ist und über ECT_HoleEinstellung benutzt
+	// werden kann). Wir übergeben dem Dialog nur die leere Liste.
 	m_pImportParamsList = new CImportParamsList;
 
 	// init CImport
@@ -222,7 +222,7 @@ void CECTImportXCtrl::Init(LONG dokID)
 	else 
 		m_pImportDlg->ShowWindow(SW_SHOW);
 
-	m_pImport->SetDokumentID ( m_pDoc );	// jetzt, wo die EC&T-Objekte leben, kann ihnen das Dokument-Handle �bergeben werden
+	m_pImport->SetDokumentID ( m_pDoc );	// jetzt, wo die EC&T-Objekte leben, kann ihnen das Dokument-Handle übergeben werden
 
 
 
@@ -274,17 +274,19 @@ void CECTImportXCtrl::OnDestroy()
 	  // Speichern der ImportParams-Liste passiert in CDlgImportDescr::OnDestroy,
 	  // solange das gehostete CEinstellung-OCX noch lebt.
 
-	  // depending on list box selection, set bytes in array to 0 or 1 so Execute knows which lines to import
+	  // IDRETRY = "Selektierte importieren": importiere nur die Zeilen, bei
+	  // denen das Häkchen in m_FileContent gesetzt ist. (Frueher wurde die
+	  // Listen-Selektion LVIS_SELECTED benutzt; seit der Umstellung auf
+	  // LVS_EX_CHECKBOXES sind die Häkchen das maßgebliche Kriterium.)
 	  CByteArray* pSelectionArray;
-	  if (m_pImportDlg->m_Result == IDRETRY) // IDRETRY = nur selektierte Buchungen importieren
+	  if (m_pImportDlg->m_Result == IDRETRY)
 	  {
 		  pSelectionArray = new CByteArray;
-		  int n = m_pImportDlg->m_FileContent.GetItemCount();		  
+		  int n = m_pImportDlg->m_FileContent.GetItemCount();
 		  pSelectionArray->SetSize(n);
 
-		  int row;
-		  for (row = 0; row < n; row++)
-			  pSelectionArray->SetAt(row, (BYTE)m_pImportDlg->m_FileContent.GetItemState(row, LVIS_SELECTED) ? 1 : 0 );
+		  for (int row = 0; row < n; row++)
+			  pSelectionArray->SetAt(row, m_pImportDlg->m_FileContent.GetCheck(row) ? 1 : 0);
 	  }
 	  else
 		  pSelectionArray = NULL;	// import all

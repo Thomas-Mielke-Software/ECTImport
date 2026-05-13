@@ -48,6 +48,7 @@ BEGIN_MESSAGE_MAP(CDlgImportDescr, CImportUIBase)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_UTF8CONVERT, &CDlgImportDescr::OnBnClickedUtf8convert)
 	ON_WM_DESTROY()
+	ON_NOTIFY(NM_RCLICK, IDC_FILECONTENT, &CDlgImportDescr::OnNMRClickFilecontent)
 END_MESSAGE_MAP()
 
 
@@ -303,7 +304,7 @@ BOOL CDlgImportDescr::OnInitDialog()
 
   // init controls
   m_SeparatorChar.SetLimitText ( 10 );
-  m_FileContent.SetExtendedStyle ( m_FileContent.GetExtendedStyle() | LVS_EX_FULLROWSELECT );
+  m_FileContent.SetExtendedStyle ( m_FileContent.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES );
   m_NumHeaderLines.SetLimitText ( 4 );
   m_NumHeaderLinesSpin.SetRange32 ( 0, 1000 );
 
@@ -1339,9 +1340,23 @@ void CDlgImportDescr::OnBnClickedOk2()
 
 void CDlgImportDescr::OnLvnItemchangedFilecontent(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-	(GetDlgItem(IDOK2))->EnableWindow(true);
+	UNREFERENCED_PARAMETER ( pNMHDR );
 	*pResult = 0;
+
+	// IDOK2 ("Selektierte importieren") ist nur sinnvoll, wenn mindestens
+	// eine Zeile in der File-Content-Liste angehakt ist. Das gilt auch nach
+	// einem Aufruf aus dem Popup-Menü (SetCheck löst LVN_ITEMCHANGED aus).
+	BOOL bAnyChecked = FALSE;
+	int nItems = m_FileContent.GetItemCount();
+	for ( int i = 0; i < nItems; i++ )
+	{
+		if ( m_FileContent.GetCheck ( i ) )
+		{
+			bAnyChecked = TRUE;
+			break;
+		}
+	}
+	GetDlgItem ( IDOK2 )->EnableWindow ( bAnyChecked );
 }
 
 void CDlgImportDescr::OnCbnSelchangeFieldEa()
@@ -1620,4 +1635,102 @@ void CDlgImportDescr::OnDestroy()
 	ECT_SetEinstellungCtrl ( NULL );
 
 	CImportUIBase::OnDestroy();
+}
+
+// ----------------------------------------------------------
+// Popup-Menü auf der File-Content-Liste:
+//   - "Alle anhaken"               setzt das Häkchen auf allen Zeilen
+//   - "Alle Häkchen entfernen"     entfernt sie auf allen Zeilen
+//   - "Selektierte Häkchen ändern" wirkt nur auf die momentan
+//                                  selektierten Zeilen. Sind alle
+//                                  selektierten ungehakt, wird auf TRUE
+//                                  gesetzt; sind sie alle gehakt ODER
+//                                  nur ein Teil davon (gemischt), wird
+//                                  auf FALSE gesetzt -- so wie es der
+//                                  User für den Mischzustand explizit
+//                                  gewünscht hat.
+//
+// Der Knopf "Selektierte importieren" (IDOK2) liest am Ende die Häkchen
+// per GetCheck() aus (siehe ECTImportXCtrl.cpp), nicht mehr LVIS_SELECTED.
+// ----------------------------------------------------------
+void CDlgImportDescr::OnNMRClickFilecontent(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	UNREFERENCED_PARAMETER ( pNMHDR );
+	*pResult = 0;
+
+	int nItems = m_FileContent.GetItemCount();
+	if ( nItems == 0 )
+		return;
+
+	const UINT ID_CHECK_ALL   = 1;
+	const UINT ID_UNCHECK_ALL = 2;
+	const UINT ID_TOGGLE_SEL  = 3;
+
+	CMenu menu;
+	menu.CreatePopupMenu();
+	menu.AppendMenu ( MF_STRING, ID_CHECK_ALL,   _T("Alle anhaken") );
+	menu.AppendMenu ( MF_STRING, ID_UNCHECK_ALL, _T("Alle Häkchen entfernen") );
+
+	UINT nSelected = m_FileContent.GetSelectedCount();
+	menu.AppendMenu ( MF_STRING | (nSelected > 0 ? MF_ENABLED : MF_GRAYED),
+	                  ID_TOGGLE_SEL, _T("Selektierte Häkchen ändern") );
+
+	CPoint pt;
+	GetCursorPos ( &pt );
+	UINT cmd = menu.TrackPopupMenu (
+		TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD | TPM_NONOTIFY,
+		pt.x, pt.y, this );
+
+	switch ( cmd )
+	{
+	case ID_CHECK_ALL:
+		for ( int i = 0; i < nItems; i++ )
+			m_FileContent.SetCheck ( i, TRUE );
+		break;
+
+	case ID_UNCHECK_ALL:
+		for ( int i = 0; i < nItems; i++ )
+			m_FileContent.SetCheck ( i, FALSE );
+		break;
+
+	case ID_TOGGLE_SEL:
+		{
+			// Sind ALLE selektierten Zeilen aktuell ungehakt? Dann anhaken.
+			// Andernfalls (alle gehakt oder Mischzustand) ent-haken.
+			BOOL bAnyChecked = FALSE;
+			POSITION pos = m_FileContent.GetFirstSelectedItemPosition();
+			while ( pos )
+			{
+				int row = m_FileContent.GetNextSelectedItem ( pos );
+				if ( m_FileContent.GetCheck ( row ) )
+				{
+					bAnyChecked = TRUE;
+					break;
+				}
+			}
+			BOOL bNewState = bAnyChecked ? FALSE : TRUE;
+
+			pos = m_FileContent.GetFirstSelectedItemPosition();
+			while ( pos )
+			{
+				int row = m_FileContent.GetNextSelectedItem ( pos );
+				m_FileContent.SetCheck ( row, bNewState );
+			}
+		}
+		break;
+	}
+
+	// IDOK2 wird nur sinnvoll, wenn etwas angehakt ist -- aktivieren, falls
+	// ein Häkchen gesetzt ist (analog zu OnLvnItemchangedFilecontent fuer
+	// Selektion). Knopf bleibt deaktiviert, wenn nichts angehakt ist.
+	BOOL bAnyChecked = FALSE;
+	for ( int i = 0; i < nItems; i++ )
+	{
+		if ( m_FileContent.GetCheck ( i ) )
+		{
+			bAnyChecked = TRUE;
+			break;
+		}
+	}
+	GetDlgItem ( IDOK2 )->EnableWindow ( bAnyChecked );
 }
