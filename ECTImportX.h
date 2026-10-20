@@ -18,6 +18,14 @@ class CECTImportXApp : public COleControlModule
 public:
 	BOOL InitInstance();
 	int ExitInstance();
+
+	// Keep-Alive-Referenz auf EasyCTX.ocx, gehalten von InitInstance bis
+	// ExitInstance, damit MFCs Hosting der eingebetteten ActiveX-Controls
+	// in CDlgImportDescr auch unter aelteren easyct.exe-Versionen sauber
+	// laeuft. Ohne diese Referenz wirft FillListSitesOrWnds einen
+	// ASSERT(IsWindow(m_hWnd)), weil die OCX zur Dialog-Init-Zeit nicht
+	// im Prozess ist.
+	LPUNKNOWN m_pEasyCTXKeepAlive = NULL;
 };
 
 extern CECTImportXApp theApp;

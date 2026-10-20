@@ -2,9 +2,13 @@
 
 #include "stdafx.h"
 #include "ECTImportX.h"
+#include "easycashdoc.h"
+#include "DlgImportDescr.h"
+#include "import.h"
 #include "DlgAbout.h"
 #include "BuchungCtrl.h"
 #include "EinstellungCtrl.h"
+#include "ECTImportXCtrl.h"
 
 
 #ifdef _DEBUG
@@ -33,6 +37,33 @@ BOOL CECTImportXApp::InitInstance()
 	if (bInit)
 	{
 		AfxEnableControlContainer();	// wichtig, um auf die EC&T-Controls zuzugreifen!
+
+		// Pre-Load von EasyCTX.ocx in den Prozess. Ohne diesen Schritt
+		// scheitert in der alten easyct.exe v3.6 das In-Place-Aktivieren
+		// der drei in CDlgImportDescr eingebetteten ActiveX-Controls
+		// (DokumentCtrl, BuchungCtrl, EinstellungCtrl) mit einem
+		// ASSERT(IsWindow(pTemp->m_hWnd)) in
+		// COleControlContainer::FillListSitesOrWnds -- weil die alte
+		// Host-Apartment EasyCTX.ocx zur Dialog-Init-Zeit nicht
+		// nachladen kann. Frueher wurde die OCX als Seiteneffekt eines
+		// COleDispatchDriver::CreateDispatch-Aufrufs aus LoadFromIniFile
+		// vorgeladen; den habe ich entfernt, also holen wir das hier
+		// explizit nach. CLSID DFA091A6-D040-444F-800A-656BEA3361C3 ist
+		// CEinstellungCtrl aus EasyCTX.ocx.
+		static const CLSID clsid_Einstellung =
+			{ 0xDFA091A6, 0xD040, 0x444F,
+			  { 0x80, 0x0A, 0x65, 0x6B, 0xEA, 0x33, 0x61, 0xC3 } };
+		LPUNKNOWN pUnk = NULL;
+		HRESULT hr = CoCreateInstance ( clsid_Einstellung, NULL,
+		                                CLSCTX_INPROC_SERVER,
+		                                IID_IUnknown, (void**)&pUnk );
+		if ( SUCCEEDED(hr) && pUnk )
+			pUnk->Release();	// EasyCTX.ocx bleibt nach Release im
+		                        // Prozess geladen, das reicht uns.
+		else
+			TRACE ( "ECTImportX: CoCreateInstance(EinstellungCtrl) fuer "
+			        "Pre-Load von EasyCTX.ocx fehlgeschlagen: 0x%08X\n",
+			        hr );
 	}
 
 	return bInit;
@@ -45,6 +76,21 @@ BOOL CECTImportXApp::InitInstance()
 int CECTImportXApp::ExitInstance()
 {
 	//CoUninitialize();
+
+	// Vom Host nicht releasede Plugin-Instanzen vor dem CRT-Teardown
+	// freigeben. Sonst meldet der Leak-Detector das CECTImportXCtrl-Objekt
+	// (536 B) plus seinen ctlview.cpp-Tracking-Eintrag (12 B) als Leak.
+	// Die im Ctor angelegte und im Dtor gepflegte intrusive Liste
+	// CECTImportXCtrl::s_pFirstInstance macht das Aufraeumen O(N) und
+	// allokiert selbst keinen zusaetzlichen Speicher.
+	CECTImportXCtrl::CleanupLeftoverInstances();
+
+	// Keep-Alive-Referenz auf EasyCTX.ocx freigeben.
+	if ( m_pEasyCTXKeepAlive )
+	{
+		m_pEasyCTXKeepAlive->Release();
+		m_pEasyCTXKeepAlive = NULL;
+	}
 
 	return COleControlModule::ExitInstance();
 }

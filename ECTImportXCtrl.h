@@ -55,5 +55,17 @@ protected:
 public:
 	afx_msg void OnDestroy();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
+
+	// Intrusive single-linked list aller lebenden Instanzen. Wird vom
+	// Ctor/Dtor gepflegt und in CECTImportXApp::ExitInstance verwendet,
+	// um vom Host nicht released'te Instanzen vor dem CRT-Teardown
+	// freizugeben (sonst meldet der Leak-Detector sie als Leak).
+	static CECTImportXCtrl* s_pFirstInstance;
+	CECTImportXCtrl* m_pNextInstance;
+
+	// Vom Host nicht released'te Instanzen freigeben (called from
+	// CECTImportXApp::ExitInstance). Statisch, weil der Destruktor
+	// protected ist und von extern nicht direkt aufrufbar.
+	static void CleanupLeftoverInstances();
 };
 

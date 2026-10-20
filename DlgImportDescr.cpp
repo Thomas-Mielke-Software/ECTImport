@@ -485,14 +485,60 @@ void CDlgImportDescr::OnSelFilename()
   CFileDialog OpenDialog ( TRUE,                                                // OpenDialog
                            "csv",  //CString ( MAKEINTRESOURCE ( IDS_OPENDEFEXT ) ),  // DefExt
                            _T(""),                                              // Filename
-                           OFN_ENABLESIZING | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_SHOWHELP | OFN_EXPLORER, // Flags 
+                           OFN_ENABLESIZING | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_SHOWHELP | OFN_EXPLORER, // Flags
                            CString ( MAKEINTRESOURCE ( IDS_OPENFILEFILTER ) ),  // Filter
-                           NULL );                                              // ParentWnd 
-  
-  // display dialog 
+                           NULL );                                              // ParentWnd
+
+  // display dialog
   if ( OpenDialog.DoModal() == IDOK )
   {
-    m_Filename.SetWindowText ( OpenDialog.GetPathName() );
+    CString sFilename = OpenDialog.GetPathName();
+
+    // check for UTF-8 BOM and auto-convert to ANSI if present
+    CFile file;
+    CFileException error;
+    CFileStatus fileStatus;
+    if (file.Open(sFilename, CFile::modeRead | CFile::shareDenyWrite, &error))
+    {
+      file.GetStatus(fileStatus);
+      if (fileStatus.m_size >= 3)
+      {
+        unsigned char bom[3] = { 0 };
+        if (file.Read(bom, 3) == 3 && bom[0] == 0xEF && bom[1] == 0xBB && bom[2] == 0xBF)
+        {
+          // read full file content
+          file.SeekToBegin();
+          CStringA filebuffer;
+          LPVOID cpFilebuffer = filebuffer.GetBuffer((int)fileStatus.m_size + 1);
+          UINT nBytesRead = file.Read(cpFilebuffer, (UINT)fileStatus.m_size);
+          ((char*)cpFilebuffer)[nBytesRead] = '\0';
+          filebuffer.ReleaseBuffer();
+          file.Close();
+
+          // convert UTF-8 to ANSI, skipping the 3-byte BOM
+          CString filebufferAnsi;
+          Utf8toAnsi(filebuffer.Mid(3), filebufferAnsi);
+
+          // write converted file
+          CString sFilenameAnsi = sFilename + ".ansi";
+          CFile fileAnsi;
+          if (fileAnsi.Open(sFilenameAnsi, CFile::modeWrite | CFile::modeCreate, &error))
+          {
+            fileAnsi.Write(filebufferAnsi.GetBuffer(0), filebufferAnsi.GetLength() - 1);
+            filebufferAnsi.ReleaseBuffer();
+            fileAnsi.Close();
+            sFilename = sFilenameAnsi;
+            AfxMessageBox("Die ausgew\xe4hlte Datei war UTF-8-kodiert (BOM erkannt) und wurde automatisch in das ANSI-Format konvertiert.");
+          }
+        }
+        else
+          file.Close();
+      }
+      else
+        file.Close();
+    }
+
+    m_Filename.SetWindowText ( sFilename );
     // save current data
     UpdateData ( TRUE );
     // clear file content list view
@@ -752,7 +798,7 @@ void CDlgImportDescr::UpdateFileContentColumnWidths(void)
     for ( col = 0; col <= m_CurrentImportParams->GetColumnNames()->GetSize() - 1; col++ )
 	{
 		int nFesteSpaltenbreite = m_CurrentImportParams->GetColumnWidth(col);	// hat mal ein Benutzer die Spaltenbreite manuell verändert? Dann diesen Wert bevorzugen und fixieren!
-		nPlatzbedarf += nFesteSpaltenbreite ? nFesteSpaltenbreite : m_FileContent.GetStringWidth ( m_CurrentImportParams->GetColumnNames()->GetAt ( col ));	// ansonsten ï¿½bern Daumen peilen
+		nPlatzbedarf += nFesteSpaltenbreite ? nFesteSpaltenbreite : m_FileContent.GetStringWidth ( m_CurrentImportParams->GetColumnNames()->GetAt ( col ));	// ansonsten übern Daumen peilen
 	}
 	int nSpielraumProSpalte = (nFileContentBreite - nPlatzbedarf) / m_CurrentImportParams->GetColumnNames()->GetSize();
     for ( col = 0; col <= m_CurrentImportParams->GetColumnNames()->GetSize() - 1; col++ )
@@ -1037,6 +1083,12 @@ void CDlgImportDescr::UpdateControlState()
   m_FieldAfAGenauigkeit.EnableWindow ( m_CurrentImportParams != NULL );
   m_FieldBetrieb.EnableWindow ( m_CurrentImportParams != NULL );
   m_FieldBestandskonto.EnableWindow ( m_CurrentImportParams != NULL );
+  EnableDialogItem ( IDC_UTF8CONVERT, m_CurrentImportParams != NULL );
+  EnableDialogItem ( IDC_GAWKSCRIPT, m_CurrentImportParams != NULL );
+  EnableDialogItem ( IDC_SELGAWKSCRIPT, m_CurrentImportParams != NULL );
+  EnableDialogItem ( IDC_EDITGAWKSCRIPT, m_CurrentImportParams != NULL );
+  EnableDialogItem ( IDC_EXEGAWKSCRIPT, m_CurrentImportParams != NULL );
+  EnableDialogItem ( IDC_STATIC31, m_CurrentImportParams != NULL );
 
   // special treatment for controls without wrapper classes (labels)
   EnableDialogItem ( IDC_GROUPBOX1, m_CurrentImportParams != NULL );
@@ -1506,6 +1558,14 @@ void CDlgImportDescr::OnBnClickedUtf8convert()
 	CFileStatus FileStatus;
 
 	UpdateData(TRUE);
+
+	// ohne ausgewählte Importbeschreibung bzw. Datei gibt es nichts zu konvertieren
+	if (!m_CurrentImportParams || m_CurrentImportParams->GetFilename().IsEmpty())
+	{
+		AfxMessageBox(_T("Bitte zuerst eine Importbeschreibung und eine zu konvertierende Datei auswählen."));
+		return;
+	}
+
 	try
 	{
 		// remove ".awked" suffix

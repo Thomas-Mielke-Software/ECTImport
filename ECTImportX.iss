@@ -3,27 +3,26 @@
 
 [Setup]
 AppName=CSV-Import
-AppVerName=CSV-Import 6.0
+AppVerName=CSV-Import 6.2
 DiskSpanning=no
 AppPublisher=tm
 AppPublisherURL=http://www.easyct.de
 AppSupportURL=http://www.easyct.de
 AppUpdatesURL=http://www.easyct.de
-DefaultDirName={pf}\EasyCash&Tax\Plugins\CSV-Import      
+DefaultDirName={pf}\EasyCash&Tax\Plugins\CSV-Import
 UsePreviousAppDir=yes
 DefaultGroupName=EasyCash
 OutputBaseFilename=ECTImportXSetup
 OutputDir=.\Setup
 MinVersion=6.1
 Compression=bzip   
-SignTool=winsdk10sha1   ; dual sign the 
-SignTool=winsdk10sha256 ; installer
+SignTool=winsdk10sha256
 
 [Files]
 Source: ".\VC_redist.x86.exe"; DestDir: {tmp}; Flags: dontcopy
 
-Source: .\Release\ECTImportX.ocx; DestDir: {app}; Flags: regserver ignoreversion
-Source: .\ECTIFace.dll; DestDir: {app}; Flags: ignoreversion
+Source: .\Release\ECTImportX.ocx; DestDir: {app}; Flags: regserver ignoreversion signonce
+Source: .\ECTIFace.dll; DestDir: {app}; Flags: ignoreversion signonce
 ; ECTIFace nur noch benötigt für GetIniFileName
 Source: .\LIZENZ.TXT; DestDir: {app}; Flags: ignoreversion
 ; veraltete Help Datei nicht mehr: Source: D:\Work\ECTImportX\Release\ECTEImport.hlp; DestDir: {app}; Flags: ignoreversion

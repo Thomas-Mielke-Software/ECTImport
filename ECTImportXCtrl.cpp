@@ -17,6 +17,22 @@
 IMPLEMENT_DYNCREATE(CECTImportXCtrl, COleControl)
 
 
+// Kopf der intrusiven Liste lebender Instanzen.
+// Siehe Kommentar in CECTImportXCtrl::CECTImportXCtrl().
+CECTImportXCtrl* CECTImportXCtrl::s_pFirstInstance = NULL;
+
+
+void CECTImportXCtrl::CleanupLeftoverInstances()
+{
+	// Wird aus CECTImportXApp::ExitInstance aufgerufen, wenn der Host
+	// (EasyCash.exe) das Plugin-Control nicht released hat. Loescht alle
+	// noch verbliebenen Instanzen einzeln; der Destruktor jeder Instanz
+	// kettet sich selbst aus der Liste aus.
+	while (s_pFirstInstance)
+		delete s_pFirstInstance;
+}
+
+
 
 // Message map
 
@@ -121,6 +137,12 @@ CECTImportXCtrl::CECTImportXCtrl()
 	m_pImportDlg = NULL;
 	m_pImport = NULL;
 	m_pImportParamsList = NULL;
+
+	// In die statische Liste lebender Instanzen einreihen, damit
+	// CECTImportXApp::ExitInstance() ggf. nicht released'te Instanzen
+	// vor dem Leak-Detector aufraeumen kann.
+	m_pNextInstance = s_pFirstInstance;
+	s_pFirstInstance = this;
 }
 
 
@@ -132,6 +154,13 @@ CECTImportXCtrl::~CECTImportXCtrl()
 	if (m_pImport) delete m_pImport;
 	if (m_pImportDlg) delete m_pImportDlg;
 	if (m_pImportParamsList) delete m_pImportParamsList;
+
+	// Aus der statischen Liste lebender Instanzen austragen.
+	CECTImportXCtrl** ppCur = &s_pFirstInstance;
+	while (*ppCur && *ppCur != this)
+		ppCur = &((*ppCur)->m_pNextInstance);
+	if (*ppCur == this)
+		*ppCur = m_pNextInstance;
 }
 
 
@@ -319,11 +348,33 @@ void CECTImportXCtrl::OnDestroy()
 		AfxGetApp()->EndWaitCursor();
 	  }
 
-	if (m_pImportDlg) 
-	{
-//		m_pImportDlg->DestroyWindow();
-	}
-	
+	// Ressourcen hier freigeben statt erst im Destruktor: der OLE-
+	// Refcount des Controls erreicht oft nicht 0 bevor die CRT-Teardown
+	// den Leak-Detector triggert. Ohne diesen Block wuerden sonst
+	// alle vom Plugin allokierten Objekte als geleakt gemeldet.
+	//
+	// Reihenfolge wichtig:
+	//   1. m_pImportDlg  -- erst explizit DestroyWindow (loest WM_DESTROY
+	//      und damit CDlgImportDescr::OnDestroy aus), dann delete.
+	//      In CDlgImportDescr::OnDestroy wird per
+	//      SaveToIniFile() noch auf m_pImportParamsList zugegriffen.
+	//   2. m_pImport
+	//   3. m_pImportParamsList  -- erst NACH dem Dialog.
+	// Pointer auf NULL setzen, damit der Destruktor (falls er doch
+	// noch lauft) nicht doppelt freigibt.
+
+	// ACHTUNG: Das Dialog-HWND lebt hier noch (Kinder werden erst nach dem
+	// WM_DESTROY des Eltern-Fensters zerstoert). Ein blosses delete wuerde
+	// DestroyWindow erst in CWnd::~CWnd ausloesen -- dann ist der vptr schon
+	// auf CWnd zurueckgesetzt, CDlgImportDescr::OnDestroy wird NICHT mehr
+	// aufgerufen und SaveToIniFile() unterbleibt (geloeschte/geaenderte
+	// Importbeschreibungen gingen verloren). Deshalb explizit vorher zerstoeren.
+	if (m_pImportDlg && m_pImportDlg->GetSafeHwnd())
+		m_pImportDlg->DestroyWindow();
+	if (m_pImportDlg)        { delete m_pImportDlg;        m_pImportDlg = NULL; }
+	if (m_pImport)           { delete m_pImport;           m_pImport = NULL; }
+	if (m_pImportParamsList) { delete m_pImportParamsList; m_pImportParamsList = NULL; }
+
 	COleControl::OnDestroy();
 }
 
