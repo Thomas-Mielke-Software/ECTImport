@@ -247,7 +247,7 @@ BEGIN
     LTEXT           "&Fehlermeldungen",IDC_STATIC,7,32,55,8
     DEFPUSHBUTTON   "&OK",IDOK,219,181,50,14
     CONTROL         "",IDC_MESSAGES,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,7,42,262,134,WS_EX_CLIENTEDGE
-    LTEXT           "Während dem Import sind Fehler aufgetreten. Die unten aufgeführten Zeilen wurden nicht importiert.",IDC_STATIC,38,7,231,21,SS_NOPREFIX
+    LTEXT           "Während des Imports sind Fehler aufgetreten. Die unten aufgeführten Zeilen wurden nicht importiert.",IDC_STATIC,38,7,231,21,SS_NOPREFIX
     ICON            "",IDC_ERRORICON,7,7,21,20
 END
 

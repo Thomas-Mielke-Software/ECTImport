@@ -23,6 +23,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+// Listeneintrag fuer "keine Spalte zugeordnet": steht in den Feld-Comboboxen immer
+// auf Index 0 und entspricht SourceFieldID -1. Die gespeicherten IDs bleiben davon unberuehrt.
+static const TCHAR* const szFeldLeer = _T("<leer>");
+
 
 BEGIN_MESSAGE_MAP(CDlgImportDescr, CImportUIBase)
 	//{{AFX_MSG_MAP(CDlgImportDescr)
@@ -593,22 +597,26 @@ void CDlgImportDescr::UpdateEAFieldComboBox ( BOOL SaveAndValidate )
       } 
       else
       {
-        if ( Index == 0 ) // Income Only is selected
+        if ( Index == 0 ) // <leer> is selected
+        {
+          m_CurrentImportParams->GetFieldEA()->SetSourceFieldID ( -1 );
+        }
+        else if ( Index == 1 ) // Income Only is selected
         {
           m_CurrentImportParams->GetFieldEA()->SetConversionRule ( CEAFieldConversion::cIncomeOnly );
         }
         else 
-          if ( Index == 1 ) // Expense Only is selected
+          if ( Index == 2 ) // Expense Only is selected
           {
             m_CurrentImportParams->GetFieldEA()->SetConversionRule ( CEAFieldConversion::cExpenseOnly );
           }
           else 
-            if ( Index == 2 ) // Use Sign is selected
+            if ( Index == 3 ) // Use Sign is selected
             {
               m_CurrentImportParams->GetFieldEA()->SetConversionRule ( CEAFieldConversion::cUseSign );
             }
             else
-              m_CurrentImportParams->GetFieldEA()->SetSourceFieldID ( Index - 3 );
+              m_CurrentImportParams->GetFieldEA()->SetSourceFieldID ( Index - 4 );
       }
     }
   }
@@ -621,6 +629,7 @@ void CDlgImportDescr::UpdateEAFieldComboBox ( BOOL SaveAndValidate )
     {
       // add special entries for conversion rules
       CString s;
+      m_FieldEA.AddString ( szFeldLeer );
       s.LoadString ( IDS_CONVERSIONRULE_INCOME_ONLY );  // cIncomeOnly
       m_FieldEA.AddString ( s );
       s.LoadString ( IDS_CONVERSIONRULE_EXPENSE_ONLY ); // cExpenseOnly
@@ -637,20 +646,22 @@ void CDlgImportDescr::UpdateEAFieldComboBox ( BOOL SaveAndValidate )
       switch ( m_CurrentImportParams->GetFieldEA()->GetConversionRule() )
       {
         case CEAFieldConversion::cIncomeOnly:
-          m_FieldEA.SetCurSel ( 0 );
-          break;
-        
-        case CEAFieldConversion::cExpenseOnly:
           m_FieldEA.SetCurSel ( 1 );
           break;
         
-        case CEAFieldConversion::cUseSign:
+        case CEAFieldConversion::cExpenseOnly:
           m_FieldEA.SetCurSel ( 2 );
+          break;
+        
+        case CEAFieldConversion::cUseSign:
+          m_FieldEA.SetCurSel ( 3 );
           break;          
 
         default: // cUseFormat
-          if ( m_CurrentImportParams->GetFieldEA()->GetSourceFieldID() >= 0 && m_CurrentImportParams->GetFieldEA()->GetSourceFieldID() <= m_FieldEA.GetCount() )
-            m_FieldEA.SetCurSel ( m_CurrentImportParams->GetFieldEA()->GetSourceFieldID() + 3 );
+          if ( m_CurrentImportParams->GetFieldEA()->GetSourceFieldID() < 0 )
+            m_FieldEA.SetCurSel ( 0 );
+          else if ( m_CurrentImportParams->GetFieldEA()->GetSourceFieldID() <= m_FieldEA.GetCount() )
+            m_FieldEA.SetCurSel ( m_CurrentImportParams->GetFieldEA()->GetSourceFieldID() + 4 );
           else
             if ( m_CurrentImportParams->GetFieldEA()->GetSourceFieldID() >= 0 )
               SetDlgItemInt ( m_FieldEA.GetDlgCtrlID(), m_CurrentImportParams->GetFieldEA()->GetSourceFieldID() + 1, TRUE );
@@ -685,17 +696,21 @@ void CDlgImportDescr::UpdateBNFieldComboBox ( BOOL SaveAndValidate )
       } 
       else
       {
-        if ( Index == 0 ) // Income Only is selected
+        if ( Index == 0 ) // <leer> is selected
+        {
+          m_CurrentImportParams->GetFieldBruttoNetto()->SetSourceFieldID ( -1 );
+        }
+        else if ( Index == 1 ) // Brutto Only is selected
         {
           m_CurrentImportParams->GetFieldBruttoNetto()->SetConversionRule ( CBruttoNettoFieldConversion::cBruttoOnly );
         }
         else 
-          if ( Index == 1 ) // Expense Only is selected
+          if ( Index == 2 ) // Netto Only is selected
           {
             m_CurrentImportParams->GetFieldBruttoNetto()->SetConversionRule ( CBruttoNettoFieldConversion::cNettoOnly );
           }
           else 
-            m_CurrentImportParams->GetFieldBruttoNetto()->SetSourceFieldID ( Index - 2 );
+            m_CurrentImportParams->GetFieldBruttoNetto()->SetSourceFieldID ( Index - 3 );
       }
     }
   }
@@ -708,6 +723,7 @@ void CDlgImportDescr::UpdateBNFieldComboBox ( BOOL SaveAndValidate )
     {
       // add special entries for conversion rules
       CString s;
+      m_FieldBruttoNetto.AddString ( szFeldLeer );
       s.LoadString ( IDS_CONVERSIONRULE_BRUTTO_ONLY );  // cIncomeOnly
       m_FieldBruttoNetto.AddString ( s );
       s.LoadString ( IDS_CONVERSIONRULE_NETTO_ONLY ); // cExpenseOnly
@@ -722,16 +738,18 @@ void CDlgImportDescr::UpdateBNFieldComboBox ( BOOL SaveAndValidate )
       switch ( m_CurrentImportParams->GetFieldBruttoNetto()->GetConversionRule() )
       {
         case CBruttoNettoFieldConversion::cBruttoOnly:
-          m_FieldBruttoNetto.SetCurSel ( 0 );
-          break;
-        
-        case CBruttoNettoFieldConversion::cNettoOnly:
           m_FieldBruttoNetto.SetCurSel ( 1 );
           break;
         
+        case CBruttoNettoFieldConversion::cNettoOnly:
+          m_FieldBruttoNetto.SetCurSel ( 2 );
+          break;
+        
         default: // cUseFormat
-          if ( m_CurrentImportParams->GetFieldBruttoNetto()->GetSourceFieldID() >= 0 && m_CurrentImportParams->GetFieldBruttoNetto()->GetSourceFieldID() <= m_FieldBruttoNetto.GetCount() )
-            m_FieldBruttoNetto.SetCurSel ( m_CurrentImportParams->GetFieldBruttoNetto()->GetSourceFieldID() + 2 );
+          if ( m_CurrentImportParams->GetFieldBruttoNetto()->GetSourceFieldID() < 0 )
+            m_FieldBruttoNetto.SetCurSel ( 0 );
+          else if ( m_CurrentImportParams->GetFieldBruttoNetto()->GetSourceFieldID() <= m_FieldBruttoNetto.GetCount() )
+            m_FieldBruttoNetto.SetCurSel ( m_CurrentImportParams->GetFieldBruttoNetto()->GetSourceFieldID() + 3 );
           else
             if ( m_CurrentImportParams->GetFieldBruttoNetto()->GetSourceFieldID() >= 0 )
               SetDlgItemInt ( m_FieldBruttoNetto.GetDlgCtrlID(), m_CurrentImportParams->GetFieldBruttoNetto()->GetSourceFieldID() + 1, TRUE );
@@ -1218,6 +1236,8 @@ void CDlgImportDescr::UpdateFieldComboBox ( CComboBox* ComboBox, CFieldConversio
         if ( Trans == 0 )
           Index = -1;
       }  
+      else
+        Index--;  // Index 0 ist <leer> (= -1), danach folgen Spalten und Festwerte
       Field->SetSourceFieldID ( Index );
     }
   }
@@ -1230,6 +1250,7 @@ void CDlgImportDescr::UpdateFieldComboBox ( CComboBox* ComboBox, CFieldConversio
     if ( m_CurrentImportParams )
     {
       int i;
+      ComboBox->AddString ( szFeldLeer );
       for ( i = 0; i <= m_CurrentImportParams->GetColumnNames()->GetSize() - 1; i++ )
         ComboBox->AddString ( m_CurrentImportParams->GetColumnNames()->GetAt ( i ) );
     }
@@ -1249,8 +1270,8 @@ void CDlgImportDescr::UpdateFieldComboBox ( CComboBox* ComboBox, CFieldConversio
 			int i;
 			CString kontonr, kontoname;
 			char *ea;
-			if (((CComboBox *)GetDlgItem(IDC_FIELD_EA))->GetCurSel() == 0) ea = "e";
-			else if (((CComboBox *)GetDlgItem(IDC_FIELD_EA))->GetCurSel() == 1) ea = "a";
+			if (((CComboBox *)GetDlgItem(IDC_FIELD_EA))->GetCurSel() == 1) ea = "e";
+			else if (((CComboBox *)GetDlgItem(IDC_FIELD_EA))->GetCurSel() == 2) ea = "a";
 			else ea = "ea";
 			unsigned int kontoart;
 			for (kontoart = 0; kontoart < strlen(ea); kontoart++)
@@ -1294,16 +1315,18 @@ void CDlgImportDescr::UpdateFieldComboBox ( CComboBox* ComboBox, CFieldConversio
 			{
 				char festwert[1000];
 				int nID = Field->GetSourceFieldID();
-				if (ComboBox->GetLBTextLen(nID) < sizeof(festwert))
+				if (ComboBox->GetLBTextLen(nID + 1) < sizeof(festwert))
 				{
-					ComboBox->GetLBText(nID, festwert);	
+					ComboBox->GetLBText(nID + 1, festwert);	
 					if (!strncmp(festwert, "(Festwert) ", 11))
 						Field->SetFestwert(festwert+11);
 				}
 			}
 
-		if ( Field->GetSourceFieldID() >= 0 && Field->GetSourceFieldID() <= ComboBox->GetCount() )
-			ComboBox->SetCurSel ( Field->GetSourceFieldID() );
+		if ( Field->GetSourceFieldID() < 0 )
+			ComboBox->SetCurSel ( 0 );
+		else if ( Field->GetSourceFieldID() <= ComboBox->GetCount() )
+			ComboBox->SetCurSel ( Field->GetSourceFieldID() + 1 );
 		else
 			if ( Field->GetSourceFieldID() >= 0 )
 				SetDlgItemInt ( ComboBox->GetDlgCtrlID(), Field->GetSourceFieldID() + 1, TRUE );
