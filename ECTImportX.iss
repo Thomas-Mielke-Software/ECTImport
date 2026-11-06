@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=CSV-Import
-AppVerName=CSV-Import 6.2
+AppVerName=CSV-Import 6.3
 DiskSpanning=no
 AppPublisher=tm
 AppPublisherURL=http://www.easyct.de

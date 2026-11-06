@@ -23,9 +23,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Listeneintrag fuer "keine Spalte zugeordnet": steht in den Feld-Comboboxen immer
-// auf Index 0 und entspricht SourceFieldID -1. Die gespeicherten IDs bleiben davon unberuehrt.
-static const TCHAR* const szFeldLeer = _T("<leer>");
+// Listeneintrag für "keine Spalte zugeordnet": steht in den Feld-Comboboxen immer
+// auf Index 0 und entspricht SourceFieldID -1. Die gespeicherten IDs bleiben davon unberührt.
+static const TCHAR* const szFeldLeer = _T("<leer lassen>");
 
 
 BEGIN_MESSAGE_MAP(CDlgImportDescr, CImportUIBase)
